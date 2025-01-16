@@ -1,28 +1,72 @@
 import React from 'react';
 import { View, StyleSheet, Text } from 'react-native';
+import { Picker } from '@react-native-picker/picker'; 
 import Input from '../atoms/Input';
 import Button from '../atoms/Button';
 import { useRouter } from 'expo-router';
 
-
-
-export default function  SearchBox () {
+const SearchBox: React.FC = () => {
   const router = useRouter();
-  const [ query, setQuery ] = React.useState<string>('');
-  const searching = ()=>{ 
-    if(query.length>0){
+  const [query, setQuery] = React.useState<string>(''); 
+  const [category, setCategory] = React.useState<string | null>(null);
+
+  const categories = [
+    { id: 'phone', label: 'Telefone' },
+    { id: 'plate', label: 'Placa' },
+    { id: 'engine', label: 'Motor' },
+    { id: 'license', label: 'Número da Carta' },
+  ];
+
+  const handleSearch = () => {
+    if (query.length > 0) {
       router.push('/(tabs)/search');
-      }
-  }
+    }
+  };
 
   return (
-  <View style={styles.container}>
-    <Text style={styles.title}>Buscar Informações</Text>
-  <Text style={styles.description}>Digite o número da carta, telefone ou outro dado abaixo:</Text>
-    <Input placeholder="Digite aqui..." style={styles.input} query={setQuery}/>
-    <Button title="Buscar" onPress={searching} style={styles.button} />
-  </View>
-  )
+    <View style={styles.container}>
+      <Text style={styles.title}>Buscar Informações</Text>
+      <Text style={styles.description}>
+        Selecione uma categoria de busca antes de continuar:
+      </Text>
+      <View style={styles.dropdownContainer}>
+        <Picker
+          selectedValue={category}
+          onValueChange={(itemValue) => setCategory(itemValue)} 
+          style={styles.picker}
+          prompt="Escolha uma categoria"
+        >
+          <Picker.Item label="Selecione uma categoria" value={null} />
+          {categories.map((item) => (
+            <Picker.Item key={item.id} label={item.label} value={item.id} />
+          ))}
+        </Picker>
+      </View>
+      {category && (
+        <>
+          <Text style={styles.inputLabel}>
+            Digite o dado correspondente à categoria "{categories.find((c) => c.id === category)?.label}":
+          </Text>
+          <Input
+            placeholder="Digite aqui..."
+            style={styles.input}
+            query={setQuery}
+          />
+        </>
+      )}
+      <Button
+        title="Buscar"
+        onPress={handleSearch}
+        style={[
+          styles.button,
+          {
+            backgroundColor: query && category ? '#3b82f6' : '#a1a1aa', 
+          },
+        ]}
+        disabled={!query || !category} 
+      />
+    </View>
+  );
 };
 
 const styles = StyleSheet.create({
@@ -46,11 +90,31 @@ const styles = StyleSheet.create({
     color: '#6b7280',
     marginBottom: 12,
   },
-  input: {
+  dropdownContainer: {
+    marginBottom: 16,
+    borderRadius: 8,
+    borderWidth: 1,
+    borderColor: '#e5e7eb',
+    overflow: 'hidden',
+  },
+  picker: {
+    height: 50,
+    backgroundColor: '#f9fafb',
+  },
+  inputLabel: {
+    fontSize: 14,
+    color: '#6b7280',
     marginBottom: 8,
+  },
+  input: {
+    marginBottom: 12,
   },
   button: {
     flexShrink: 0,
+    padding: 10,
+    borderRadius: 8,
+    alignItems: 'center',
   },
 });
 
+export default SearchBox;

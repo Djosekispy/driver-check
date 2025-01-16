@@ -14,9 +14,9 @@ import { styles } from '../../styles/style'
 
 import HomeCards from '@/components/home/organisms/HomeCards';
 import { useRouter } from 'expo-router';
+import PoliceAppHighlights from '@/components/home/organisms/Safety';
 
 const HomeScreen: React.FC = () => {
-    const router = useRouter();
   return (
   <SafeAreaView style={styles.container}>
     <Header />
@@ -25,7 +25,6 @@ const HomeScreen: React.FC = () => {
     <View style={styles.content}>
       <SearchBox/>
   
-      <FilterButton />
       
       <View style={styles.infoBox}>
         <Text style={styles.infoTitle}>Informações do Sistema</Text>
@@ -34,7 +33,7 @@ const HomeScreen: React.FC = () => {
           cartas de condução, seguros e taxas de forma eficiente.
         </Text>
       </View>
-      
+      <PoliceAppHighlights />
       <HomeCards />
      <ContactSection />
 

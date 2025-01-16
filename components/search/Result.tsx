@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, TouchableOpacity, StyleSheet, ScrollView } from 'react-native';
+import { View, Text, TouchableOpacity, StyleSheet, ScrollView, Linking } from 'react-native';
 import { FontAwesome, MaterialIcons } from '@expo/vector-icons';
 import  { styles }  from './style';
 
@@ -8,22 +8,21 @@ type CollapseItem = {
   title: string;
   icon: React.ReactNode;
   content: string;
+  document?: string; 
 };
 
 const ResultScreen = () => {
   const [expanded, setExpanded] = useState<string | null>(null);
 
-  // Função para expandir/colapsar itens
   const toggleExpand = (id: string) => {
     setExpanded((prev) => (prev === id ? null : id));
   };
 
-  // Dados fictícios para a tela
   const user = {
     name: 'Mauro Vicente',
     phone: '+244 912 345 678',
     address: 'Bairro Santo António, Rua 12, Huíla',
-    status: 'restrito', // ou 'livre'
+    status: 'restrito', 
   };
 
   const collapseItems: CollapseItem[] = [
@@ -32,6 +31,7 @@ const ResultScreen = () => {
       title: 'Informações Pessoais',
       icon: <FontAwesome name="user" size={20} color="#2563eb" />,
       content: 'BI: 001234567\nData de Nascimento: 01/01/1990\nEstado Civil: Solteiro',
+      document: 'http://example.com/bi.pdf',
     },
     {
       id: '2',
@@ -44,24 +44,30 @@ const ResultScreen = () => {
       title: 'Carta de Condução',
       icon: <FontAwesome name="id-card" size={20} color="#10b981" />,
       content: 'Número: 12345678\nCategoria: B\nValidade: 01/01/2030',
+      document: 'http://example.com/bi.pdf',
     },
     {
       id: '4',
       title: 'Taxa de Circulação',
       icon: <FontAwesome name="money" size={20} color="#ef4444" />,
       content: 'Pago até: 01/01/2025\nValor: AKZ 50,000',
+      document: 'http://example.com/bi.pdf',
     },
     {
       id: '5',
       title: 'Seguro',
       icon: <MaterialIcons name="security" size={20} color="#6d28d9" />,
       content: 'Cobertura: Total\nValidade: 01/01/2024\nValor: AKZ 100,000',
+      document: 'http://example.com/bi.pdf',
     },
   ];
 
+  const openDocument = (url: string) => {
+    Linking.openURL(url); 
+  };
+  
   return (
     <View style={styles.container}>
-      {/* Header */}
       <View style={styles.header}>
         <View style={styles.headerLeft}>
           <Text style={styles.userName}>{user.name}</Text>
@@ -76,8 +82,6 @@ const ResultScreen = () => {
           />
         </View>
       </View>
-
-      {/* Lista de Itens */}
       <View style={styles.list}>
         {collapseItems.map((item) => (
           <View key={item.id} style={styles.listItem}>
@@ -98,6 +102,11 @@ const ResultScreen = () => {
             {expanded === item.id && (
               <View style={styles.collapseContent}>
                 <Text style={styles.collapseText}>{item.content}</Text>
+                {item.document && (
+                  <TouchableOpacity onPress={() => openDocument(String(item.document))} style={styles.documentButton}>
+                    <Text style={styles.documentText}>Ver Documento</Text>
+                  </TouchableOpacity>
+                )}
               </View>
             )}
           </View>

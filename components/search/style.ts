@@ -21,6 +21,19 @@ export const styles = StyleSheet.create({
     shadowRadius: 4,
     elevation: 2,
   },
+  documentButton: {
+    marginTop: 8,
+    backgroundColor: '#3b82f6',
+    paddingVertical: 8,
+    paddingHorizontal: 16,
+    borderRadius: 8,
+    alignItems: 'center',
+  },
+  
+  documentText: {
+    fontSize: 14,
+    color: '#ffffff',
+  },  
   headerLeft: {
     flex: 1,
   },

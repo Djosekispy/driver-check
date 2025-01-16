@@ -23,7 +23,7 @@ export const styles = StyleSheet.create({
     padding: 16,
     backgroundColor: '#e5e7eb',
     borderRadius: 8,
-    marginBottom: 24,
+    marginVertical: 24,
   },
   infoTitle: {
     fontSize: 18,
