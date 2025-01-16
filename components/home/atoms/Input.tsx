@@ -4,13 +4,15 @@ import { TextInput, StyleSheet } from 'react-native';
 interface InputProps {
   placeholder: string;
   style?: object;
+  query : (text:string)=>void;
 }
 
-const Input: React.FC<InputProps> = ({ placeholder, style }) => (
+const Input: React.FC<InputProps> = ({ placeholder, style, query }) => (
   <TextInput
     style={[styles.input, style]}
     placeholder={placeholder}
     placeholderTextColor="#9ca3af"
+    onChangeText={query}
   />
 );
 

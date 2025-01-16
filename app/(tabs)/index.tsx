@@ -1,14 +1,32 @@
 import ContactRow from '@/components/home/atoms/ContactRow';
 import SearchBox from '@/components/home/molecules/SearchBar';
 import Header from '@/components/home/organisms/Header';
+import FilterButton from '@/components/home/organisms/ButtonFilter';
+import ResultScreen  from '@/components/search/Result'
+import ContactSection from '@/components/footer/ContactSection';
+import  SearchHistory  from '@/components/search/HistorySearch'
 import React from 'react';
-import { SafeAreaView, StyleSheet, View, Text } from 'react-native';
+import { SafeAreaView, StyleSheet, View, Text,ScrollView } from 'react-native';
 
-const HomeScreen: React.FC = () => (
+import { styles } from '../../styles/style'
+
+
+
+import HomeCards from '@/components/home/organisms/HomeCards';
+import { useRouter } from 'expo-router';
+
+const HomeScreen: React.FC = () => {
+    const router = useRouter();
+  return (
   <SafeAreaView style={styles.container}>
     <Header />
+   <ScrollView style={{flex:1}} showsVerticalScrollIndicator={false}>
+
     <View style={styles.content}>
-      <SearchBox />
+      <SearchBox/>
+  
+      <FilterButton />
+      
       <View style={styles.infoBox}>
         <Text style={styles.infoTitle}>Informações do Sistema</Text>
         <Text style={styles.infoText}>
@@ -16,45 +34,23 @@ const HomeScreen: React.FC = () => (
           cartas de condução, seguros e taxas de forma eficiente.
         </Text>
       </View>
-      <View>
-        <Text style={styles.sectionTitle}>Contato</Text>
-        <ContactRow iconName="phone" text="+244 123 456 789" />
-        <ContactRow iconName="envelope" text="contato@apppolicial.com" />
+      
+      <HomeCards />
+     <ContactSection />
+
+      <View style={styles.footer}>
+        <Text style={styles.footerText}>
+          © {new Date().getFullYear()} Driver Check. Todos os direitos
+          reservados.
+        </Text>
       </View>
     </View>
+  
+  </ScrollView>
   </SafeAreaView>
-);
+  )
+};
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#f3f4f6',
-  },
-  content: {
-    padding: 16,
-  },
-  infoBox: {
-    padding: 16,
-    backgroundColor: '#e5e7eb',
-    borderRadius: 8,
-    marginBottom: 24,
-  },
-  infoTitle: {
-    fontSize: 18,
-    fontWeight: '600',
-    color: '#374151',
-    marginBottom: 8,
-  },
-  infoText: {
-    color: '#6b7280',
-    fontSize: 14,
-  },
-  sectionTitle: {
-    fontSize: 18,
-    fontWeight: '600',
-    color: '#374151',
-    marginBottom: 16,
-  },
-});
+
 
 export default HomeScreen;

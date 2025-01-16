@@ -2,15 +2,28 @@ import React from 'react';
 import { View, StyleSheet, Text } from 'react-native';
 import Input from '../atoms/Input';
 import Button from '../atoms/Button';
+import { useRouter } from 'expo-router';
 
-const SearchBox: React.FC = () => (
+
+
+export default function  SearchBox () {
+  const router = useRouter();
+  const [ query, setQuery ] = React.useState<string>('');
+  const searching = ()=>{ 
+    if(query.length>0){
+      router.push('/(tabs)/search');
+      }
+  }
+
+  return (
   <View style={styles.container}>
     <Text style={styles.title}>Buscar Informações</Text>
-    <Text style={styles.description}>Digite o número da carta, telefone ou outro dado abaixo:</Text>
-    <Input placeholder="Digite aqui..." style={styles.input} />
-    <Button title="Buscar" onPress={() => console.log('Buscando...')} style={styles.button} />
+  <Text style={styles.description}>Digite o número da carta, telefone ou outro dado abaixo:</Text>
+    <Input placeholder="Digite aqui..." style={styles.input} query={setQuery}/>
+    <Button title="Buscar" onPress={searching} style={styles.button} />
   </View>
-);
+  )
+};
 
 const styles = StyleSheet.create({
   container: {
@@ -41,4 +54,3 @@ const styles = StyleSheet.create({
   },
 });
 
-export default SearchBox;
