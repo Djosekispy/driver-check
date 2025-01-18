@@ -5,10 +5,17 @@
     "start": "expo start",
     "android": "expo start --android",
     "ios": "expo start --ios",
-    "web": "expo start --web"
+    "web": "expo start --web",
+    "test": "jest --watchAll",
+    "test:repositories" : "jest --testPathPattern=integration/repositories"
+  },
+  "jest": {
+    "preset": "jest-expo"
   },
   "dependencies": {
     "@expo/vector-icons": "^14.0.2",
+    "@react-native-picker/picker": "2.9.0",
+    "axios": "^1.7.9",
     "expo": "~52.0.24",
     "expo-camera": "~16.0.10",
     "expo-router": "~4.0.16",
@@ -20,11 +27,11 @@
     "react-native-paper": "4.9.2",
     "react-native-reanimated": "^3.16.7",
     "react-native-safe-area-context": "^5.1.0",
-    "react-native-screens": "^4.5.0",
-    "@react-native-picker/picker": "2.9.0"
+    "react-native-screens": "^4.5.0"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0",
+    "@types/jest": "^29.5.14",
     "typescript": "^5.7.3"
   },
   "private": true

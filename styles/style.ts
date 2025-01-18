@@ -7,7 +7,7 @@ const isLargeScreen = screenHeight > 800;
 
 const dynamicSpacing = Platform.select({
   ios: isLargeScreen ? 44 : 20,
-  android: StatusBar.currentHeight || 24, 
+  android: StatusBar.currentHeight || 10, 
 });
 
 export const styles = StyleSheet.create({

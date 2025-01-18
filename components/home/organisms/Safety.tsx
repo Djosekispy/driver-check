@@ -5,7 +5,7 @@ import { FontAwesome5 } from '@expo/vector-icons'; // Ícones de autoridade e po
 const PoliceAppHighlights: React.FC = () => {
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Segurança e Policiamento</Text>
+     {/* <Text style={styles.title}>Segurança e Policiamento</Text>*/}
       <View style={styles.cardContainer}>
         <View style={styles.card}>
           <FontAwesome5 name="shield-alt" size={40} color="#0f172a" style={styles.icon} />
@@ -14,7 +14,7 @@ const PoliceAppHighlights: React.FC = () => {
             Garantimos segurança contínua nas estradas com monitoramento ativo.
           </Text>
         </View>
-        <View style={styles.card}>
+      {/*  <View style={styles.card}>
           <FontAwesome5 name="traffic-light" size={40} color="#0f172a" style={styles.icon} />
           <Text style={styles.cardTitle}>Monitoramento de Trânsito</Text>
           <Text style={styles.cardText}>
@@ -27,7 +27,7 @@ const PoliceAppHighlights: React.FC = () => {
           <Text style={styles.cardText}>
             Viaturas estrategicamente posicionadas para resposta rápida.
           </Text>
-        </View>
+        </View>*/}
       </View>
     </View>
   );

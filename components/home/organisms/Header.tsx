@@ -5,7 +5,10 @@ import { FontAwesome, MaterialIcons } from '@expo/vector-icons';
 import driver from '@/assets/images/driver.png';
 import { useRouter } from 'expo-router';
 
-const Header: React.FC = () => {
+interface HeaderProps {
+  title ? : string
+}
+function Header ({title}: HeaderProps){
   const [hasPermission, setHasPermission] = useState<boolean | null>(null);
   const [facing, setFacing] = useState<CameraType>('back');
   const [modalVisible, setModalVisible] = useState(false);
@@ -43,7 +46,7 @@ const Header: React.FC = () => {
       <TouchableOpacity onPress={() => router.push('/')}>
         <Image source={driver} style={styles.icon} />
       </TouchableOpacity>
-      <Text style={styles.title}>Driver Check</Text>
+      <Text style={styles.title}>{title ? title : 'Driver Check'}</Text>
       <TouchableOpacity style={styles.qrButton} onPress={requestCameraPermission}>
         <FontAwesome name="qrcode" size={34} color="#000" />
       </TouchableOpacity>

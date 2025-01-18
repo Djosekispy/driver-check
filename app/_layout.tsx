@@ -1,4 +1,5 @@
 import { Stack } from 'expo-router';
+import { StatusBar } from 'react-native';
 
 export {
   ErrorBoundary,
@@ -15,8 +16,11 @@ export default function RootLayout() {
 
 function RootLayoutNav() {
   return (
+    <>
+    <StatusBar backgroundColor={'#FFF'} barStyle={'dark-content'} networkActivityIndicatorVisible translucent />
       <Stack>
         <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
       </Stack>
+      </>
   );
 }

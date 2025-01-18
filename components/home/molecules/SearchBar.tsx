@@ -55,12 +55,12 @@ const SearchBox: React.FC = () => {
         </>
       )}
       <Button
-        title="Buscar"
+        title="Submeter a Buscar"
         onPress={handleSearch}
         style={[
           styles.button,
           {
-            backgroundColor: query && category ? '#3b82f6' : '#a1a1aa', 
+            backgroundColor: query && category ? '#3b82f6' : '#FF7F50', 
           },
         ]}
         disabled={!query || !category} 
