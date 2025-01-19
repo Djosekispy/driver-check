@@ -1,5 +1,6 @@
 import { getRquestImplementation } from "@/request/method/GET/GetRequestImplementation";
 import ICartaInterface from "./ICartaRepository";
+import IGetRequestEndpoints from "@/request/method/GET/GetRequestInterface";
 
 
  class CartaRepository implements ICartaInterface {

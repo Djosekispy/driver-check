@@ -1,5 +1,6 @@
 import { getRquestImplementation } from "@/request/method/GET/GetRequestImplementation";
 import IMotoristaInterface from "./IMotoristaRepository";
+import IGetRequestEndpoints from "@/request/method/GET/GetRequestInterface";
 
 
 

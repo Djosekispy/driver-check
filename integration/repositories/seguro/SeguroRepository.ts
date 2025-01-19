@@ -1,5 +1,7 @@
 import { getRquestImplementation } from "@/request/method/GET/GetRequestImplementation";
 import ISeguroInterface from "./ISeguroRepository";
+import IGetRequestEndpoints from "@/request/method/GET/GetRequestInterface";
+
 
 
 

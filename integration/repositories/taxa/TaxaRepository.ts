@@ -1,5 +1,7 @@
 import { getRquestImplementation } from "@/request/method/GET/GetRequestImplementation";
 import ITaxaRepository from "./ITaxaRepository";
+import IGetRequestEndpoints from "@/request/method/GET/GetRequestInterface";
+
 
 
 class TaxaRepository implements ITaxaRepository {

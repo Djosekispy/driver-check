@@ -7,7 +7,8 @@
     "ios": "expo start --ios",
     "web": "expo start --web",
     "test": "jest --watchAll",
-    "test:repositories" : "jest --testPathPattern=integration/repositories"
+    "test:repositories": "jest --testPathPattern=integration/repositories",
+    "test:motorista": "ts-node ./integration/repositories/__tests__/Motorista.spec.ts"
   },
   "jest": {
     "preset": "jest-expo"
@@ -27,7 +28,8 @@
     "react-native-paper": "4.9.2",
     "react-native-reanimated": "^3.16.7",
     "react-native-safe-area-context": "^5.1.0",
-    "react-native-screens": "^4.5.0"
+    "react-native-screens": "^4.5.0",
+    "ts-node": "^10.9.2"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0",

@@ -1,5 +1,7 @@
 import{ getRquestImplementation } from "@/request/method/GET/GetRequestImplementation";
 import IVeiculoRepository from "./IVeiculoRepository";
+import IGetRequestEndpoints from "@/request/method/GET/GetRequestInterface";
+
 
 
 

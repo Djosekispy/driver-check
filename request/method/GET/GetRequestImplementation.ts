@@ -1,4 +1,5 @@
 import request from "@/request/RME/mapper";
+import IGetRequestEndpoints from "./GetRequestInterface";
 
 
 export default class GetRquestImplementation implements IGetRequestEndpoints {

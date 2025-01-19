@@ -1,6 +1,6 @@
 
 
-interface IGetRequestEndpoints {
+export default interface IGetRequestEndpoints {
     obterMotoristaPorId: (id: number) => Promise<any>;
     obterMotoristaPorTelefone: (telefone: string) => Promise<any>;
     obterMotoristaPorGenero: (genero: string) => Promise<any>;
