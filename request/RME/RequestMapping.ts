@@ -25,18 +25,24 @@ export default class RequestMapper<T extends RequestConfig> {
     }
     let url = route.endpoint;
 
- if (paramsQueries && Object.keys(paramsQueries).length > 0) {
-  const { id, ...otherParams } = paramsQueries; 
-  if (id) {
-    url = url.replace(":id", encodeURIComponent(String(id)));
-  }
-
-  if (Object.keys(otherParams).length > 0) {
-    const queryString = new URLSearchParams(otherParams).toString();
-    url += `?${queryString}`;
-  }
-}
-
+    if (paramsQueries && Object.keys(paramsQueries).length > 0) {
+      Object.entries(paramsQueries).forEach(([key, value]) => {
+        const encodedValue = encodeURIComponent(String(value));
+        url = url.replace(`:${key}`, encodedValue);
+      });
+      const remainingParams = Object.fromEntries(
+        Object.entries(paramsQueries).filter(([key, value]) => !url.includes(`/${encodeURIComponent(String(value))}`))
+      );
+      const stringParams = Object.fromEntries(
+        Object.entries(remainingParams).map(([key, value]) => [key, String(value)])
+      );
+    
+      if (Object.keys(stringParams).length > 0) {
+        const queryString = new URLSearchParams(stringParams).toString();
+        url += `?${queryString}`;
+      }
+    }
+    
 if (url.includes(":")) {
   throw new Error(
     `Missing required parameters for endpoint: ${url}. Ensure all placeholders are provided.`

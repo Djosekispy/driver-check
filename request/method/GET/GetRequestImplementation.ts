@@ -8,15 +8,15 @@ export default class GetRquestImplementation implements IGetRequestEndpoints {
         return request.route.getMotoristaById.get({id});
     }
     obterMotoristaPorTelefone = async (telefone: string) => {
-        return request.route.getMotoristaByPhone.get(telefone);
+        return request.route.getMotoristaByPhone.get({telefone});
     }
 
     obterMotoristaPorGenero = async (genero: string) => {
-        return request.route.getMotoristaByGender.get(genero);
+        return request.route.getMotoristaByGender.get({genero});
     }
 
     obterSeguroPorId = async (id: number) => {
-        return request.route.getSeguroById.get(id);
+        return request.route.getSeguroById.get({id});
     }
 
     obterSeguroAtivo = async () => {
@@ -24,35 +24,35 @@ export default class GetRquestImplementation implements IGetRequestEndpoints {
     }
 
     obterSeguroPorAsseguradora = async (asseguradora: string) => {
-        return request.route.getSeguroByAsseguradora.get(asseguradora);
+        return request.route.getSeguroByAsseguradora.get({asseguradora});
     }
 
     obterVeiculoPorId = async (id: number) => {
-        return request.route.getVeiculoById.get(id);
+        return request.route.getVeiculoById.get({id});
     }
 
     obterVeiculoPorPlaca = async (placa: string) => {
-        return request.route.getVeiculoByPlaca.get(placa);
+        return request.route.getVeiculoByPlaca.get({placa});
     }
 
     obterVeiculoPorMarca = async (marca: string) => {
-        return request.route.getVeiculoByMarca.get(marca);
+        return request.route.getVeiculoByMarca.get({marca});
     }
 
     obterCartaPorId = async (id: number) => {
-        return request.route.getCartaById.get(id);
+        return request.route.getCartaById.get({id});
     }
 
     obterCartaPorLicenca = async (licenca: string) => {
-        return request.route.getCartaByLicenca.get(licenca);
+        return request.route.getCartaByLicenca.get({licenca});
     }
 
     obterTaxaPorId = async (id: number) => {
-        return request.route.getTaxaById.get(id);
+        return request.route.getTaxaById.get({id});
     }
 
     obterTaxaPorUpdates = async (limit: number) => {
-        return request.route.getTaxaByUpdates.get(limit);
+        return request.route.getTaxaByUpdates.get({limit});
     }
 }
 

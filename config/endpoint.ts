@@ -3,25 +3,25 @@ const config = {
     
     // Motorista
     getMotoristaById: { endpoint: "/motorista/:id" },
-    getMotoristaByPhone: { endpoint: "/motorista/telefone/" },
-    getMotoristaByGender: { endpoint: "/motorista/genero/" },
+    getMotoristaByPhone: { endpoint: "/motorista/telefone/:telefone" },
+    getMotoristaByGender: { endpoint: "/motorista/genero/:genero" },
 
     // Seguro
-    getSeguroById: { endpoint: "/seguro/" },
+    getSeguroById: { endpoint: "/seguro/:id" },
     getActiveSeguro: { endpoint: "/seguro-active" },
-    getSeguroByAsseguradora: { endpoint: "/seguro/asseguradora/" },
+    getSeguroByAsseguradora: { endpoint: "/seguro/asseguradora/:asseguradora" },
 
     // Veiculo
-    getVeiculoById: { endpoint: "/veiculo/" },
-    getVeiculoByPlaca: { endpoint: "/veiculo/placa/" },
-    getVeiculoByMarca: { endpoint: "/veiculo/marca/" },
+    getVeiculoById: { endpoint: "/veiculo/:id" },
+    getVeiculoByPlaca: { endpoint: "/veiculo/placa/:placa" },
+    getVeiculoByMarca: { endpoint: "/veiculo/marca/:marca" },
 
     // Carta de Conducao
-    getCartaById: { endpoint: "/carta/" },
-    getCartaByLicenca: { endpoint: "/carta/licenca/" },
+    getCartaById: { endpoint: "/carta/:id" },
+    getCartaByLicenca: { endpoint: "/carta/licenca/:licenca" },
 
     // Taxa de Circulação
-    getTaxaById: { endpoint: "/taxa/" },
+    getTaxaById: { endpoint: "/taxa/:id" },
     getTaxaByUpdates: { endpoint: "/taxa/updates/" },
   };
 
