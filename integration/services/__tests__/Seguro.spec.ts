@@ -1,7 +1,7 @@
 import { isAxiosError } from "axios";
 import { seguroService } from "../seguro/seguroService";
 
-describe('Testes de integração para Seguros : casos certos',()=>{
+describe('Testando os services dos Seguros : casos certos',()=>{
     it('Obter Seguro pelo Id',async()=>{
         try {
             const data  = await seguroService.buscarSeguroPorId(5)
@@ -57,7 +57,7 @@ describe('Testes de integração para Seguros : casos certos',()=>{
 
 
 
-describe('Testes de integração para Seguros : casos de Falha',()=>{
+describe('Testando os services dos Seguros : casos de Falha',()=>{
     it('Erro ao Obter Seguro pelo Id',async()=>{
         try {
             const  data  = await seguroService.buscarSeguroPorId(1)
