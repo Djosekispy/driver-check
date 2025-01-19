@@ -22,7 +22,7 @@ const config = {
 
     // Taxa de Circulação
     getTaxaById: { endpoint: "/taxa/:id" },
-    getTaxaByUpdates: { endpoint: "/taxa/updates/" },
+    getTaxaByUpdates: { endpoint: "/taxa/updates/:limit" },
   };
 
   export default config;

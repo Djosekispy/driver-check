@@ -1,13 +1,13 @@
 import { isAxiosError } from "axios";
-import { motoristaRepository } from "../motorista/MotoristaRepository";
+import { motoristaService } from "../motorista/MotoristaService";
 
 
-describe('Testes de integração para Motorista : casos certos', () => {
+describe('Testando os services para Motorista : casos certos', () => {
 
   it('Obter Motorista por Id', async () => {
     try {
-      const { data } = await motoristaRepository.obterMotoristaPorId(1);
-      expect(data.result).toMatchObject({
+      const  data  = await motoristaService.buscarMotoristaPeloId(1);
+      expect(data).toMatchObject({
         id: expect.any(Number),
         nome: expect.any(String),
         endereco: expect.any(String),
@@ -21,8 +21,8 @@ describe('Testes de integração para Motorista : casos certos', () => {
 
   it('Obter Motorista por Telefone', async () => {
     try {
-      const { data } = await motoristaRepository.obterMotoristaPorTelefone("927023711");
-      expect(data.motorista).toMatchObject({
+      const  data  = await motoristaService.buscarMotoristaPeloTelefone("927023711");
+      expect(data).toMatchObject({
         id: expect.any(Number),
         nome: expect.any(String),
         endereco: expect.any(String),
@@ -36,8 +36,8 @@ describe('Testes de integração para Motorista : casos certos', () => {
 
   it('Obter Motorista por Genero', async () => {
     try {
-      const { data } = await motoristaRepository.obterMotoristaPorGenero("Masculino");
-      expect(data.motorista[0]).toMatchObject({
+      const  data  = await motoristaService.buscarMotoristaPeloGenero("Masculino");
+      expect(data[0]).toMatchObject({
         id: expect.any(Number),
         nome: expect.any(String),
         endereco: expect.any(String),
@@ -53,12 +53,12 @@ describe('Testes de integração para Motorista : casos certos', () => {
 
 
 
-describe('Testes de integração para Motorista : Casos de Erro', () => {
+describe('Testando os services para Motorista : Casos de Erro', () => {
 
   it('Erro ao Obter Motorista por Telefone', async () => {
     try {
-    const { data } = await motoristaRepository.obterMotoristaPorTelefone("927023720");
-    expect(data.motorista).toEqual(null)
+    const  data  = await motoristaService.buscarMotoristaPeloTelefone("927023720");
+    expect(data).toEqual(null)
     } catch (error) {
       throw error;
     }
@@ -66,7 +66,7 @@ describe('Testes de integração para Motorista : Casos de Erro', () => {
  
   it('Erro ao Obter Motorista por id', async () => {
     try {
-    await motoristaRepository.obterMotoristaPorId(40);
+    await motoristaService.buscarMotoristaPeloId(40);
     } catch (error) {
       const message = isAxiosError(error) ? error.response?.data.message : error
       expect(message).toBe("Registro não encontrado");
@@ -75,7 +75,7 @@ describe('Testes de integração para Motorista : Casos de Erro', () => {
 
   it('Erro ao Obter Motorista por Genero inexistente', async () => {
     try {
-    const { data } = await motoristaRepository.obterMotoristaPorGenero("popol");
+    const  data  = await motoristaService.buscarMotoristaPeloGenero("popol");
     } catch (error) {
       const message = isAxiosError(error) ? error.response?.data.error : error
       expect(message).toContain("Algo deu errado");
@@ -84,8 +84,8 @@ describe('Testes de integração para Motorista : Casos de Erro', () => {
 
   it('Erro ao Obter Motorista por Genero Existente', async () => {
     try {
-    const { data } = await motoristaRepository.obterMotoristaPorGenero("Feminino");
-    expect(data.motorista).toEqual([]);
+    const  data  = await motoristaService.buscarMotoristaPeloGenero("Feminino");
+    expect(data).toEqual([]);
     } catch (error) {
       throw error;
     }

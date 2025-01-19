@@ -1,4 +1,5 @@
 import Carta from "./Carta";
+import Veiculo from "./Veiculo";
 
 export default  class Motorista {
     id: number;
@@ -12,6 +13,7 @@ export default  class Motorista {
     numero_bi_ou_passport: string;
     genero: string;
     cartaDeConducao? : Carta[]
+    veiculo ? : Veiculo[]
   
     constructor(
       id: number,
