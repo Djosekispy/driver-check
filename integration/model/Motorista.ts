@@ -12,8 +12,8 @@ export default  class Motorista {
     url_do_BI: string;
     numero_bi_ou_passport: string;
     genero: string;
-    cartaDeConducao? : Carta[]
-    veiculo ? : Veiculo[]
+    cartaDeConducao : Carta[]
+    veiculo  : Veiculo[]
   
     constructor(
       id: number,
@@ -25,7 +25,9 @@ export default  class Motorista {
       data_expiracao_de_documento: Date,
       url_do_BI: string,
       numero_bi_ou_passport: string,
-      genero: string
+      genero: string,
+    cartaDeConducao : Carta[],
+    veiculo  : Veiculo[]
     ) {
       this.id = id;
       this.nome = nome;
@@ -37,6 +39,8 @@ export default  class Motorista {
       this.url_do_BI = url_do_BI;
       this.numero_bi_ou_passport = numero_bi_ou_passport;
       this.genero = genero;
+      this.cartaDeConducao = cartaDeConducao;
+      this.veiculo  = veiculo
     }
   }
   

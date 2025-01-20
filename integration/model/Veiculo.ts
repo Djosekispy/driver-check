@@ -22,9 +22,9 @@ export default  class Veiculo {
     tara: string;
     primeiro_registro: string;
     motorista_id : number;
-    motorista? : Motorista[]
-    seguro? : Seguro[]
-    taxaDeCirculacao? : TaxaDeCirculacao[]
+    motorista : Motorista[];
+    seguro : Seguro[];
+    taxaDeCirculacao : TaxaDeCirculacao[]
   
     constructor(
       id: number,
@@ -45,7 +45,10 @@ export default  class Veiculo {
       numero_motor: string,
       tara: string,
       primeiro_registro: string,
-      motorista_id : number
+      motorista_id : number, 
+      motorista : Motorista[],
+      seguro : Seguro[],
+      taxaDeCirculacao : TaxaDeCirculacao[]
     ) {
       this.id = id;
       this.marca = marca;
@@ -66,6 +69,9 @@ export default  class Veiculo {
       this.tara = tara;
       this.primeiro_registro = primeiro_registro;
       this.motorista_id = motorista_id;
+      this.motorista = motorista;
+      this.seguro = seguro,
+      this.taxaDeCirculacao = taxaDeCirculacao
     }
   }
   

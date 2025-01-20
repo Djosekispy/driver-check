@@ -57,4 +57,23 @@ export const styles = StyleSheet.create({
     color: '#9ca3af',
     fontSize: 12,
   },
+  searchContainer: {
+    margin: 4,
+    flexDirection: 'row',
+    alignItems: 'center',
+    padding: 10,
+    backgroundColor: '#ffffff',
+    borderRadius: 8,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+    elevation: 2,
+    marginBottom: 16,
+  },
+  searchText: {
+    fontSize: 16,
+    color: '#1f2937',
+    marginLeft: 8,
+  },
 });

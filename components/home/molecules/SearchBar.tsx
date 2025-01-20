@@ -4,24 +4,29 @@ import { Picker } from '@react-native-picker/picker';
 import Input from '../atoms/Input';
 import Button from '../atoms/Button';
 import { useRouter } from 'expo-router';
+import { motoristaService } from '@/integration/services/motorista/MotoristaService';
 
 const SearchBox: React.FC = () => {
   const router = useRouter();
   const [query, setQuery] = React.useState<string>(''); 
   const [category, setCategory] = React.useState<string | null>(null);
+  const [ isLoading, setIsLoading ] = React.useState(false)
 
   const categories = [
     { id: 'phone', label: 'Telefone' },
-    { id: 'plate', label: 'Placa' },
-    { id: 'engine', label: 'Motor' },
+    { id: 'plate', label: 'Matricula' },
+    { id: 'engine', label: 'Marca' },
     { id: 'license', label: 'Número da Carta' },
+    { id: 'enterprise', label: 'Asseguradora'}
   ];
 
-  const handleSearch = () => {
-    if (query.length > 0) {
-      router.push('/(tabs)/search');
+
+
+  const handleSearch = async () => {
+     if (query.length > 0) {
+       router.push({pathname : '/(tabs)/search', params : { query, category}});
     }
-  };
+   };
 
   return (
     <View style={styles.container}>
@@ -55,7 +60,7 @@ const SearchBox: React.FC = () => {
         </>
       )}
       <Button
-        title="Submeter a Buscar"
+        title={isLoading ? "Buscando..." :"Submeter a Buscar"}
         onPress={handleSearch}
         style={[
           styles.button,
@@ -63,7 +68,7 @@ const SearchBox: React.FC = () => {
             backgroundColor: query && category ? '#3b82f6' : '#FF7F50', 
           },
         ]}
-        disabled={!query || !category} 
+        disabled={isLoading ? true : (!query || !category)} 
       />
     </View>
   );

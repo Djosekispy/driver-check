@@ -1,19 +1,10 @@
-import ContactRow from '@/components/home/atoms/ContactRow';
 import SearchBox from '@/components/home/molecules/SearchBar';
 import Header from '@/components/home/organisms/Header';
-import FilterButton from '@/components/home/organisms/ButtonFilter';
-import ResultScreen  from '@/components/search/Result'
 import ContactSection from '@/components/footer/ContactSection';
-import  SearchHistory  from '@/components/search/HistorySearch'
 import React from 'react';
-import { SafeAreaView, StyleSheet, View, Text,ScrollView } from 'react-native';
-
+import { SafeAreaView, View, Text,ScrollView } from 'react-native';
 import { styles } from '../../styles/style'
-
-
-
 import HomeCards from '@/components/home/organisms/HomeCards';
-import { useRouter } from 'expo-router';
 import PoliceAppHighlights from '@/components/home/organisms/Safety';
 
 const HomeScreen: React.FC = () => {
