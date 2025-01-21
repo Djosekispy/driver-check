@@ -22,7 +22,7 @@ export default  class Veiculo {
     tara: string;
     primeiro_registro: string;
     motorista_id : number;
-    motorista : Motorista[];
+    motorista : Motorista;
     seguro : Seguro[];
     taxaDeCirculacao : TaxaDeCirculacao[]
   
@@ -46,7 +46,7 @@ export default  class Veiculo {
       tara: string,
       primeiro_registro: string,
       motorista_id : number, 
-      motorista : Motorista[],
+      motorista : Motorista,
       seguro : Seguro[],
       taxaDeCirculacao : TaxaDeCirculacao[]
     ) {

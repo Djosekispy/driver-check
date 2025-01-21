@@ -21,23 +21,24 @@ const ResultScreenLicence: React.FC<ResultProps> = ({ result }) => {
     Linking.openURL(url);
   };
 
+  console.log(JSON.stringify(result))
   return (
     <ScrollView style={styles.container}>
       {/* Header */}
     
       <View style={styles.header}>
         <View>
-          <Text style={styles.name}>{result?.motorista[0].nome}</Text>
+          <Text style={styles.name}>{result?.motorista.nome}</Text>
           <Text style={styles.info}>
-            <FontAwesome name="phone" size={14} color="#6b7280" /> {result?.motorista[0].telefone}
+            <FontAwesome name="phone" size={14} color="#6b7280" /> {result?.motorista.telefone}
           </Text>
           <Text style={styles.info}>
-            <MaterialIcons name="location-on" size={14} color="#6b7280" /> {result?.motorista[0].endereco}
+            <MaterialIcons name="location-on" size={14} color="#6b7280" /> {result?.motorista.endereco}
           </Text>
         </View>
      
-        {result?.motorista[0].imagem ? (
-          <Image source={{ uri: `${url}/${result?.motorista[0].imagem}` }} style={{ width: 48, height: 48 }} />
+        {result?.motorista.imagem ? (
+          <Image source={{ uri: `${url}/${result?.motorista.imagem}` }} style={{ width: 48, height: 48 }} />
         ) : (
           <FontAwesome name="user" size={48} color="#6b7280" />
         )}
@@ -48,24 +49,24 @@ const ResultScreenLicence: React.FC<ResultProps> = ({ result }) => {
         <Text style={styles.sectionTitle}>
           <FontAwesome name="id-card" size={16} color="#111827" /> Documento de Identidade
         </Text>
-        <Text style={styles.sectionInfo}>Número BI: {result?.motorista[0].numero_bi_ou_passport}</Text>
+        <Text style={styles.sectionInfo}>Número BI: {result?.motorista.numero_bi_ou_passport}</Text>
         <Text style={styles.sectionInfo}>
-          Expiração: {new Date(result?.motorista[0].data_expiracao_de_documento || '').toLocaleDateString()}
+          Expiração: {new Date(result?.motorista.data_expiracao_de_documento || '').toLocaleDateString()}
         </Text>
-        <Text style={styles.sectionInfo}>Nacionalidade: {result?.motorista[0].nacionalidade}</Text>
-        <Text style={styles.sectionInfo}>Gênero: {result?.motorista[0].genero}</Text>
-        <Text style={styles.sectionInfo}>Data de Nascimento: {new Date(result?.motorista[0].data_nascimento).toLocaleDateString()}</Text>
-        <Text style={styles.sectionInfo}>Número de BI/Passport: {result?.motorista[0].numero_bi_ou_passport}</Text>
-        <TouchableOpacity style={styles.button} onPress={() => openDocument(result?.motorista[0].url_do_BI || '')}>
+        <Text style={styles.sectionInfo}>Nacionalidade: {result?.motorista.nacionalidade}</Text>
+        <Text style={styles.sectionInfo}>Gênero: {result?.motorista.genero}</Text>
+        <Text style={styles.sectionInfo}>Data de Nascimento: {new Date(result?.motorista.data_nascimento).toLocaleDateString()}</Text>
+        <Text style={styles.sectionInfo}>Número de BI/Passport: {result?.motorista.numero_bi_ou_passport}</Text>
+        <TouchableOpacity style={styles.button} onPress={() => openDocument(result?.motorista.url_do_BI || '')}>
           <Text style={styles.buttonText}>Ver Documento</Text>
         </TouchableOpacity>
       </View>
 
       {/* Cartas de Condução */}
-      {result?.motorista[0].cartaDeConducao?.length > 0 && (
+      {result?.motorista.cartaDeConducao?.length > 0 && (
         <View style={styles.section}>
          
-          {result.motorista[0].cartaDeConducao.map((carta) => (
+          {result.motorista.cartaDeConducao.map((carta) => (
             <View key={carta.id} style={styles.listItem}>
               <TouchableOpacity
                 style={styles.listHeader}
