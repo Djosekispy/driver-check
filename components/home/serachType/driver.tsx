@@ -1,15 +1,16 @@
 import React, { useState } from 'react';
-import { View, Text, TouchableOpacity, StyleSheet, ScrollView, Linking } from 'react-native';
+import { View, Text, TouchableOpacity, StyleSheet, ScrollView, Linking, Modal } from 'react-native';
 import { FontAwesome, MaterialIcons } from '@expo/vector-icons';
 import Motorista from '@/integration/model/Motorista';
+import QRCodeExport from '../molecules/QrCode';
 
 interface ResultProps {
   result: Motorista;
 }
 
-const ResultScreenDriver: React.FC<ResultProps> = ({ result }) => {
+const ResultScreen: React.FC<ResultProps> = ({ result }) => {
   const [expanded, setExpanded] = useState<string | null>(null);
-
+  const [ modalVisible , setModalVisible ] = useState(false)
   const toggleExpand = (id: string) => {
     setExpanded((prev) => (prev === id ? null : id));
   };
@@ -18,51 +19,55 @@ const ResultScreenDriver: React.FC<ResultProps> = ({ result }) => {
     Linking.openURL(url);
   };
 
+
   return (
     <ScrollView style={styles.container}>
       {/* Header */}
+    
       <View style={styles.header}>
         <View>
           <Text style={styles.name}>{result?.nome}</Text>
-          <Text style={styles.info}>Telefone: {result?.telefone}</Text>
-          <Text style={styles.info}>Endereço: {result?.endereco}</Text>
+          <Text style={styles.info}>
+            <FontAwesome name="phone" size={14} color="#6b7280" /> {result?.telefone}
+          </Text>
+          <Text style={styles.info}>
+            <MaterialIcons name="location-on" size={14} color="#6b7280" /> {result?.endereco}
+          </Text>
         </View>
-        <FontAwesome
-          name="user-circle"
-          size={48}
-          color="#4b5563"
-          style={styles.icon}
-        />
+        <FontAwesome name="user-circle" size={48} color="#4b5563" style={styles.icon} />
       </View>
 
       {/* BI Section */}
       <View style={styles.section}>
-        <Text style={styles.sectionTitle}>Documento de Identidade</Text>
+        <Text style={styles.sectionTitle}>
+          <FontAwesome name="id-card" size={16} color="#111827" /> Documento de Identidade
+        </Text>
         <Text style={styles.sectionInfo}>Número BI: {result?.numero_bi_ou_passport}</Text>
         <Text style={styles.sectionInfo}>
           Expiração: {new Date(result?.data_expiracao_de_documento || '').toLocaleDateString()}
         </Text>
-        <TouchableOpacity
-          style={styles.button}
-          onPress={() => openDocument(result?.url_do_BI || '')}
-        >
+        <Text style={styles.sectionInfo}>Nacionalidade: {result?.nacionalidade}</Text>
+        <Text style={styles.sectionInfo}>Gênero: {result?.genero}</Text>
+        <Text style={styles.sectionInfo}>Data de Nascimento: {new Date(result?.data_nascimento).toLocaleDateString()}</Text>
+        <Text style={styles.sectionInfo}>Número de BI/Passport: {result?.numero_bi_ou_passport}</Text>
+        <TouchableOpacity style={styles.button} onPress={() => openDocument(result?.url_do_BI || '')}>
           <Text style={styles.buttonText}>Ver Documento</Text>
         </TouchableOpacity>
       </View>
 
       {/* Cartas de Condução */}
-      {result.cartaDeConducao.length > 0 && (
+      {result?.cartaDeConducao?.length > 0 && (
         <View style={styles.section}>
-          <Text style={styles.sectionTitle}>Cartas de Condução</Text>
+         
           {result.cartaDeConducao.map((carta) => (
             <View key={carta.id} style={styles.listItem}>
               <TouchableOpacity
                 style={styles.listHeader}
                 onPress={() => toggleExpand(`carta-${carta.id}`)}
               >
-                <Text style={styles.listTitle}>
-                  {carta.tipo_de_carta} - {carta.numero_da_licenca}
-                </Text>
+               <Text style={styles.sectionTitle}>
+            <FontAwesome name="car" size={16} color="#111827" /> Cartas de Condução
+          </Text>
                 <FontAwesome
                   name={expanded === `carta-${carta.id}` ? 'chevron-up' : 'chevron-down'}
                   size={18}
@@ -76,6 +81,15 @@ const ResultScreenDriver: React.FC<ResultProps> = ({ result }) => {
                   </Text>
                   <Text style={styles.collapseText}>
                     Validade: {new Date(carta.validade).toLocaleDateString()}
+                  </Text>
+                  <Text style={styles.collapseText}>
+                    Tipo de Carta: {carta.tipo_de_carta}
+                  </Text>
+                  <Text style={styles.collapseText}>
+                    Número da Licença: {carta.numero_da_licenca}
+                  </Text>
+                  <Text style={styles.collapseText}>
+                    Primeira Emissão Ano: {carta.primeira_emissao_ano}
                   </Text>
                   <TouchableOpacity
                     style={styles.button}
@@ -92,46 +106,167 @@ const ResultScreenDriver: React.FC<ResultProps> = ({ result }) => {
 
       {/* Veículos */}
       {result?.veiculo?.length > 0 && (
-        <View style={styles.section}>
-          <Text style={styles.sectionTitle}>Veículos</Text>
+        <View >
+         
+          
           {result.veiculo.map((veiculo) => (
             <View key={veiculo.id} style={styles.listItem}>
+                 <View style={styles.section}>
+                 
               <TouchableOpacity
                 style={styles.listHeader}
                 onPress={() => toggleExpand(`veiculo-${veiculo.id}`)}
               >
-                <Text style={styles.listTitle}>
-                  {veiculo.marca} - {veiculo.modelo}
-                </Text>
+                <Text style={styles.sectionTitle}>
+            <FontAwesome name="truck" size={16} color="#111827" /> Veículos
+          </Text>
                 <FontAwesome
                   name={expanded === `veiculo-${veiculo.id}` ? 'chevron-up' : 'chevron-down'}
                   size={18}
                   color="#6b7280"
                 />
               </TouchableOpacity>
+              
               {expanded === `veiculo-${veiculo.id}` && (
                 <View style={styles.collapseContent}>
                   <Text style={styles.collapseText}>Matrícula: {veiculo.matricula}</Text>
-                  <Text style={styles.collapseText}>
-                    Combustível: {veiculo.combustivel}
-                  </Text>
-                  <TouchableOpacity
-                    style={styles.button}
-                    onPress={() => openDocument(veiculo.seguro[0]?.doc_url || '')}
-                  >
-                    <Text style={styles.buttonText}>Ver Seguro</Text>
-                  </TouchableOpacity>
+                  <Text style={styles.collapseText}>Combustível: {veiculo.combustivel}</Text>
+                  <Text style={styles.collapseText}>Cor: {veiculo.cor}</Text>
+                  <Text style={styles.collapseText}>Ano de Fabricação: {veiculo.ano_fabricacao}</Text>
+                  <Text style={styles.collapseText}>Peso Bruto: {veiculo.peso_bruto}</Text>
+                  <Text style={styles.collapseText}>Tipo de Caixa: {veiculo.tipo_de_caixa}</Text>
+                  <Text style={styles.collapseText}>Distância entre Eixos: {veiculo.distancia_entre_eixos}</Text>
+                  <Text style={styles.collapseText}>Modelo: {veiculo.modelo}</Text>
+                  <Text style={styles.collapseText}>Marca: {veiculo.marca}</Text>
+                  <Text style={styles.collapseText}>Medidas Pneumáticas: {veiculo.medidas_pneomaticas}</Text>
+                  <Text style={styles.collapseText}>Lotação: {veiculo.lotacao}</Text>
+                  <Text style={styles.collapseText}>Número Quadro: {veiculo.numero_quadro}</Text>
+                  <Text style={styles.collapseText}>Cilindrada: {veiculo.cilindrada}</Text>
+                  <Text style={styles.collapseText}>Número Cilindro: {veiculo.numero_cilindro}</Text>
+                  <Text style={styles.collapseText}>Tara: {veiculo.tara}</Text>
+                  <Text style={styles.collapseText}>Primeiro Registro: {veiculo.primeiro_registro}</Text>
+                  <Text style={styles.collapseText}>Número Motor: {veiculo.numero_motor}</Text>
                 </View>
               )}
+</View>
+              {/* Seguro */}
+              <View style={styles.section}>
+                <TouchableOpacity
+                  style={styles.listHeader}
+                  onPress={() => toggleExpand(`seguro-${veiculo.id}`)}
+                >
+                  <Text style={styles.listTitle}>
+                    <FontAwesome name="shield" size={14} color="#6b7280" /> Seguro
+                  </Text>
+                  <FontAwesome
+                    name={expanded === `seguro-${veiculo.id}` ? 'chevron-up' : 'chevron-down'}
+                    size={18}
+                    color="#6b7280"
+                  />
+                </TouchableOpacity>
+                {expanded === `seguro-${veiculo.id}` && veiculo.seguro?.length > 0 && (
+                  <View>
+                    {veiculo.seguro.map((seguro) => (
+                      <View key={seguro.id}>
+                        <Text style={styles.collapseText}>Asseguradora: {seguro.asseguradora}</Text>
+                        <Text style={styles.collapseText}>Tipo: {seguro.tipo}</Text>
+                        <Text style={styles.collapseText}>Data de Criação:  {new Date(seguro.data_criacao).toLocaleDateString()}</Text>
+                        <Text style={styles.collapseText}>última Actualização:  {new Date(seguro.ultima_actualizacao).toLocaleDateString()}</Text>
+                        <Text style={styles.collapseText}>
+                          Expiração: {new Date(seguro.Data_expiracao).toLocaleDateString()}
+                        </Text>
+                        <TouchableOpacity
+                          style={styles.button}
+                          onPress={() => openDocument(seguro.doc_url)}
+                        >
+                          <Text style={styles.buttonText}>Ver Documento</Text>
+                        </TouchableOpacity>
+                      </View>
+                    ))}
+                  </View>
+                )}
+              </View>
+
+              {/* Taxa de Circulação */}
+              <View style={styles.section}>
+                <TouchableOpacity
+                  style={styles.listHeader}
+                  onPress={() => toggleExpand(`taxa-${veiculo.id}`)}
+                >
+                  <Text style={styles.listTitle}>
+                    <FontAwesome name="money" size={14} color="#6b7280" />
+                     Taxa de Circulação
+                  </Text>
+                  <FontAwesome
+                    name={expanded === `taxa-${veiculo.id}` ? 'chevron-up' : 'chevron-down'}
+                    size={18}
+                    color="#6b7280"
+                  />
+                </TouchableOpacity>
+                {expanded === `taxa-${veiculo.id}` && veiculo.taxaDeCirculacao?.length > 0 && (
+                  <View>
+                    {veiculo.taxaDeCirculacao.map((taxa) => (
+                      <View key={taxa.id}>
+                         <Text style={styles.collapseText}>
+                          Criação: {new Date(taxa.criacao).toLocaleDateString()}
+                        </Text>
+                        <Text style={styles.collapseText}>
+                          última Actualização: {new Date(taxa.ultima_actualizacao).toLocaleDateString()}
+                        </Text>
+                        <Text style={styles.collapseText}>
+                          Expiração: {new Date(taxa.data_expiracao).toLocaleDateString()}
+                        </Text>
+                        <TouchableOpacity
+                          style={styles.button}
+                          onPress={() => openDocument(taxa.doc_url)}
+                        >
+                          <Text style={styles.buttonText}>Ver Documento</Text>
+                        </TouchableOpacity>
+                      </View>
+                    ))}
+                  </View>
+                )}
+              </View>
             </View>
           ))}
         </View>
       )}
+<Modal
+  animationType="slide"
+  transparent={true}
+  visible={modalVisible}
+  onRequestClose={() => setModalVisible(false)}
+>
+  <View style={styles.modalContainer}>
+    <View style={styles.modalContent}>
+      <QRCodeExport id={result.id} />
+      <TouchableOpacity 
+        style={styles.closeButton} 
+        onPress={() => setModalVisible(false)}
+      >
+        <Text style={styles.closeButtonText}>Fechar</Text>
+      </TouchableOpacity>
+    </View>
+  </View>
+</Modal>
+
+    <TouchableOpacity 
+        style={{ 
+          marginTop: 8, 
+          backgroundColor: '#3b82f6', 
+          padding: 10, 
+          borderRadius: 6, 
+          alignItems: 'center' 
+        }} 
+        onPress={()=>setModalVisible(true)}
+      >
+        <Text style={{ color: '#ffffff', fontSize: 14, fontWeight: 'bold' }}>Gerar QR Code</Text>
+      </TouchableOpacity>
     </ScrollView>
   );
-};
 
-export default ResultScreenDriver;
+}
+
 
 const styles = StyleSheet.create({
   container: {
@@ -156,6 +291,7 @@ const styles = StyleSheet.create({
   info: {
     fontSize: 14,
     color: '#4b5563',
+    marginVertical: 4,
   },
   icon: {
     marginLeft: 'auto',
@@ -170,13 +306,12 @@ const styles = StyleSheet.create({
   sectionTitle: {
     fontSize: 16,
     fontWeight: 'bold',
-    marginBottom: 8,
-    color: '#111827',
+    color: '#111827'
   },
   sectionInfo: {
     fontSize: 14,
     color: '#4b5563',
-    marginBottom: 4,
+    marginVertical: 4,
   },
   button: {
     marginTop: 8,
@@ -206,11 +341,38 @@ const styles = StyleSheet.create({
   },
   collapseContent: {
     paddingLeft: 16,
-    marginTop: 8,
+    marginTop: 10,
   },
   collapseText: {
     fontSize: 14,
     color: '#4b5563',
     marginBottom: 4,
   },
+  modalContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+  },
+  modalContent: {
+    width: '80%',
+    backgroundColor: '#ffffff',
+    borderRadius: 10,
+    padding: 20,
+    elevation: 5,
+  },
+  closeButton: {
+    marginTop: 20,
+    backgroundColor: '#ef4444',
+    padding: 10,
+    borderRadius: 6,
+    alignItems: 'center',
+  },
+  closeButtonText: {
+    color: '#ffffff',
+    fontWeight: 'bold',
+  },
 });
+
+
+export default ResultScreen;

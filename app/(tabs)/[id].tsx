@@ -13,14 +13,14 @@ import LoadingModal from '@/components/search/searchModal';
 
 const SearchScreen: React.FC = () => {
 const router = useRouter();
-  const { query, category } = useLocalSearchParams<{query : string, category : string}>()
+  const { id } = useLocalSearchParams();
   const [ isLoading, setIsLoading ] = React.useState(false)
   const [driver, setDriver ] = useState<Motorista>()
   const [modalVisible, setModalVisible] = useState(false);
   const phone = async ()=> {
     setIsLoading(true)
     try {
-      const response = await motoristaService.buscarMotoristaPeloTelefone(query)
+      const response = await motoristaService.buscarMotoristaPeloId(Number(id))
       if(!response){
         setModalVisible(true)
          return;
@@ -38,15 +38,15 @@ const router = useRouter();
   }
 
   React.useEffect(()=>{
-    category === 'phone' && phone();
-  },[category])
+    phone();
+  },[id])
 
   return (
   <SafeAreaView style={styles.container}>
     <Header title='Resultado da Pesquisa' />
    <ScrollView style={{flex:1}} showsVerticalScrollIndicator={false}>
   
-   {category === 'phone' && driver && <ResultScreenDriver result={driver} />}
+   {driver && <ResultScreenDriver result={driver} />}
 
    <ErrorModal
         visible={modalVisible}
