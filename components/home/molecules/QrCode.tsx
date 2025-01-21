@@ -1,19 +1,21 @@
 import React, { useRef } from "react";
-import { View, Button, StyleSheet } from "react-native";
+import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
 import QRCode from "react-native-qrcode-svg";
 import { captureRef } from "react-native-view-shot";
 import * as Sharing from "expo-sharing";
 import * as FileSystem from "expo-file-system";
+import { url } from "@/config/api";
 
 export default function QRCodeExport({ id }: { id: number }) {
-  const qrCodeRef = useRef(null);
-  const qrCodeURL = `driver://${id}`; 
+  const qrCodeRef = useRef<View>(null); 
+  const qrCodeURL = `${url}/motorista/${id}`; 
 
   const exportAsPNG = async () => {
     try {
       const uri = await captureRef(qrCodeRef, {
         format: "png",
         quality: 1,
+        snapshotContentContainer: false
       });
 
       if (await Sharing.isAvailableAsync()) {
@@ -29,7 +31,7 @@ export default function QRCodeExport({ id }: { id: number }) {
   const exportAsPDF = async () => {
     try {
       const uri = await captureRef(qrCodeRef, {
-        format: "png",
+        format: "webm",
         quality: 1,
       });
 
@@ -50,33 +52,51 @@ export default function QRCodeExport({ id }: { id: number }) {
 
   return (
     <View style={styles.container}>
-      {/* QR Code */}
-      <View ref={qrCodeRef} style={styles.qrContainer}>
+      <View style={styles.qrContainer} ref={qrCodeRef} collapsable={false}>
         <QRCode value={qrCodeURL} size={200} />
       </View>
-
-      {/* Botões */}
       <View style={styles.buttonsContainer}>
-        <Button title="Exportar como PNG" onPress={exportAsPNG} />
-        <Button title="Exportar como PDF" onPress={exportAsPDF} />
+        <TouchableOpacity style={styles.buttonWrapper} onPress={exportAsPDF}>
+          <Text style={styles.buttonText}>Exportar PDF</Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={[styles.buttonWrapper, { backgroundColor: "#FF7F50" }]}
+          onPress={exportAsPNG}
+        >
+          <Text style={styles.buttonText}>Exportar PNG</Text>
+        </TouchableOpacity>
       </View>
     </View>
   );
 }
 
+
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
     justifyContent: "center",
     alignItems: "center",
     backgroundColor: "#f9fafb",
+  },
+  buttonText: {
+    color: "#fff",
+    textAlign: "center",
+    fontSize: 16,
+    fontWeight: "bold",
   },
   qrContainer: {
     marginBottom: 20,
   },
   buttonsContainer: {
     flexDirection: "row",
-    justifyContent: "space-between",
-    width: "80%",
+    justifyContent: "space-evenly",
+    alignItems: "center",
+    width: "100%",
+  },
+  buttonWrapper: {
+    marginVertical: 8,
+    borderRadius: 10, 
+    backgroundColor: '#3b82f6', 
+    padding: 14,
+    elevation: 2,
   },
 });

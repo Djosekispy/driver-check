@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
-import { View, Text, TouchableOpacity, StyleSheet, ScrollView, Linking, Modal } from 'react-native';
+import { View, Text, TouchableOpacity, StyleSheet, ScrollView, Linking, Modal, Image } from 'react-native';
 import { FontAwesome, MaterialIcons } from '@expo/vector-icons';
 import Motorista from '@/integration/model/Motorista';
 import QRCodeExport from '../molecules/QrCode';
+import { url } from '@/config/api';
 
 interface ResultProps {
   result: Motorista;
@@ -19,6 +20,7 @@ const ResultScreen: React.FC<ResultProps> = ({ result }) => {
     Linking.openURL(url);
   };
 
+  console.log(url,result?.imagem)
 
   return (
     <ScrollView style={styles.container}>
@@ -34,7 +36,8 @@ const ResultScreen: React.FC<ResultProps> = ({ result }) => {
             <MaterialIcons name="location-on" size={14} color="#6b7280" /> {result?.endereco}
           </Text>
         </View>
-        <FontAwesome name="user-circle" size={48} color="#4b5563" style={styles.icon} />
+     
+        <Image source={{ uri: `${url}/${result?.imagem}` }} style={{ width: 48, height: 48 }} />
       </View>
 
       {/* BI Section */}
@@ -244,7 +247,7 @@ const ResultScreen: React.FC<ResultProps> = ({ result }) => {
         style={styles.closeButton} 
         onPress={() => setModalVisible(false)}
       >
-        <Text style={styles.closeButtonText}>Fechar</Text>
+        <FontAwesome name="times" size={20} color="#bdbdbd" />
       </TouchableOpacity>
     </View>
   </View>
@@ -363,7 +366,9 @@ const styles = StyleSheet.create({
   },
   closeButton: {
     marginTop: 20,
-    backgroundColor: '#ef4444',
+    position: 'absolute',
+    top: -20,
+    right: 2,
     padding: 10,
     borderRadius: 6,
     alignItems: 'center',
