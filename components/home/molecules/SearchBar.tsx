@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, StyleSheet, Text } from 'react-native';
+import { View, StyleSheet, Text, Platform, Modal, TouchableOpacity } from 'react-native';
 import { Picker } from '@react-native-picker/picker'; 
 import Input from '../atoms/Input';
 import Button from '../atoms/Button';
@@ -10,31 +10,25 @@ const SearchBox: React.FC = () => {
   const router = useRouter();
   const [query, setQuery] = React.useState<string>(''); 
   const [category, setCategory] = React.useState<string | null>(null);
-  const [ isLoading, setIsLoading ] = React.useState(false)
+  const [isLoading, setIsLoading] = React.useState(false);
+  const [showModal, setShowModal] = React.useState(false);
 
   const categories = [
     { id: 'phone', label: 'Telefone' },
     { id: 'plate', label: 'Matricula' },
     { id: 'engine', label: 'Marca' },
-    { id: 'license', label: 'Número da Carta' },
-    { id: 'enterprise', label: 'Asseguradora'}
+    { id: 'license', label: 'Número da Carta' }
   ];
 
-
-
   const handleSearch = async () => {
-     if (query.length > 0) {
-       router.push({pathname : '/(tabs)/search', params : { query, category}});
+    if (query.length > 0) {
+      router.push({pathname : '/(tabs)/search', params : { query, category}});
     }
-   };
+  };
 
-  return (
-    <View style={styles.container}>
-      <Text style={styles.title}>Buscar Informações</Text>
-      <Text style={styles.description}>
-        Selecione uma categoria de busca antes de continuar:
-      </Text>
-      <View style={styles.dropdownContainer}>
+  const renderPicker = () => {
+    if (Platform.OS === 'android') {
+      return (
         <Picker
           selectedValue={category}
           onValueChange={(itemValue) => setCategory(itemValue)} 
@@ -46,6 +40,48 @@ const SearchBox: React.FC = () => {
             <Picker.Item key={item.id} label={item.label} value={item.id} />
           ))}
         </Picker>
+      );
+    } else if (Platform.OS === 'ios') {
+      return (
+        <View style={styles.iosPickerContainer}>
+          <TouchableOpacity onPress={() => setShowModal(true)} style={styles.pickerButton}>
+            <Text style={styles.pickerButtonText}>
+              {category ? categories.find(c => c.id === category)?.label : "Escolha uma categoria"}
+            </Text>
+          </TouchableOpacity>
+          <Modal
+            transparent={true}
+            visible={showModal}
+            animationType="slide"
+            onRequestClose={() => setShowModal(false)}
+          >
+            <View style={styles.modalContainer}>
+              <View style={styles.modalContent}>
+                {categories.map((item) => (
+                  <TouchableOpacity
+                    key={item.id}
+                    onPress={() => { setCategory(item.id); setShowModal(false); }}
+                    style={styles.modalItem}
+                  >
+                    <Text style={styles.modalItemText}>{item.label}</Text>
+                  </TouchableOpacity>
+                ))}
+              </View>
+            </View>
+          </Modal>
+        </View>
+      );
+    }
+  };
+
+  return (
+    <View style={styles.container}>
+      <Text style={styles.title}>Buscar Informações</Text>
+      <Text style={styles.description}>
+        Selecione uma categoria de busca antes de continuar:
+      </Text>
+      <View style={styles.dropdownContainer}>
+        {renderPicker()}
       </View>
       {category && (
         <>
@@ -64,9 +100,7 @@ const SearchBox: React.FC = () => {
         onPress={handleSearch}
         style={[
           styles.button,
-          {
-            backgroundColor: query && category ? '#3b82f6' : '#FF7F50', 
-          },
+          { backgroundColor: query && category ? '#3b82f6' : '#FF7F50' }
         ]}
         disabled={isLoading ? true : (!query || !category)} 
       />
@@ -105,6 +139,41 @@ const styles = StyleSheet.create({
   picker: {
     height: 50,
     backgroundColor: '#f9fafb',
+  },
+  iosPickerContainer: {
+    marginBottom: 16,
+  },
+  pickerButton: {
+    padding: 10,
+    backgroundColor: '#f9fafb',
+    borderRadius: 8,
+    borderWidth: 1,
+    borderColor: '#e5e7eb',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  pickerButtonText: {
+    color: '#6b7280',
+  },
+  modalContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+  },
+  modalContent: {
+    backgroundColor: '#ffffff',
+    borderRadius: 8,
+    padding: 16,
+    width: 300,
+  },
+  modalItem: {
+    paddingVertical: 10,
+    paddingHorizontal: 20,
+  },
+  modalItemText: {
+    fontSize: 16,
+    color: '#6b7280',
   },
   inputLabel: {
     fontSize: 14,

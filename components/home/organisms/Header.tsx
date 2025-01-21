@@ -28,7 +28,8 @@ function Header ({title}: HeaderProps){
   const handleBarCodeScanned = ({ data }: { data: string }) => {
     setScanned(true);
     setModalVisible(false);
-    alert(`QR Code lido com sucesso! Dados: ${data}`);
+    const id = data.split('id=')[1]; 
+    router.replace(`/${id}`);
   };
 
   const handleBarCodeScannedErro = ({ data }: { data: string }) => {
@@ -43,7 +44,7 @@ function Header ({title}: HeaderProps){
 
   return (
     <View style={styles.header}>
-      <TouchableOpacity onPress={() => router.push('/')}>
+      <TouchableOpacity onPress={() => router.replace('/')}>
         <Image source={driver} style={styles.icon} />
       </TouchableOpacity>
       <Text style={styles.title}>{title ? title : 'Driver Check'}</Text>

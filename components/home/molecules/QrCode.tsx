@@ -8,7 +8,7 @@ import { url } from "@/config/api";
 
 export default function QRCodeExport({ id }: { id: number }) {
   const qrCodeRef = useRef<View>(null); 
-  const qrCodeURL = `${url}/motorista/${id}`; 
+  const qrCodeURL = `${url}/motorista/id=${id}`; 
 
   const exportAsPNG = async () => {
     try {
@@ -80,7 +80,7 @@ const styles = StyleSheet.create({
   buttonText: {
     color: "#fff",
     textAlign: "center",
-    fontSize: 16,
+    fontSize: 14,
     fontWeight: "bold",
   },
   qrContainer: {

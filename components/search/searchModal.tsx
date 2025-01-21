@@ -19,7 +19,6 @@ const LoadingModal: React.FC<LoadingModalProps> = ({ visible, message = "Buscand
             loop
             style={styles.animation}
           />
-          <Text style={styles.message}>{message}</Text>
         </View>
       </View>
     </Modal>

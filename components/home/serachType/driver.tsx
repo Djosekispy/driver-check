@@ -20,7 +20,6 @@ const ResultScreen: React.FC<ResultProps> = ({ result }) => {
     Linking.openURL(url);
   };
 
-  console.log(url,result?.imagem)
 
   return (
     <ScrollView style={styles.container}>
@@ -37,7 +36,11 @@ const ResultScreen: React.FC<ResultProps> = ({ result }) => {
           </Text>
         </View>
      
-        <Image source={{ uri: `${url}/${result?.imagem}` }} style={{ width: 48, height: 48 }} />
+        {result?.imagem ? (
+          <Image source={{ uri: `${url}/${result?.imagem}` }} style={{ width: 48, height: 48 }} />
+        ) : (
+          <FontAwesome name="user" size={48} color="#6b7280" />
+        )}
       </View>
 
       {/* BI Section */}
@@ -280,6 +283,7 @@ const styles = StyleSheet.create({
   header: {
     flexDirection: 'row',
     alignItems: 'center',
+    justifyContent: 'space-between',
     marginBottom: 16,
     padding: 16,
     backgroundColor: '#ffffff',
