@@ -37,6 +37,16 @@ class MotoristaService implements  IMotoristaServiceInterface {
             throw error;
         }
     }
+
+    buscarMotoristaPeloBilhete = async (bilhete: string) =>{
+        try {
+            const { data } = await this.motoristaRepository.obterMotoristaPorGenero(bilhete);
+            return data.motorista as Motorista
+        } catch (error) {
+            const message = isAxiosError(error) ? error.response?.data.message : error 
+            throw error;
+        }
+    }
 }
 
 export const motoristaService = new MotoristaService(motoristaRepository)

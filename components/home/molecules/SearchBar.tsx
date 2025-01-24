@@ -16,8 +16,8 @@ const SearchBox: React.FC = () => {
   const categories = [
     { id: 'phone', label: 'Telefone' },
     { id: 'plate', label: 'Matricula' },
-    { id: 'engine', label: 'Marca' },
-    { id: 'license', label: 'Número da Carta' }
+    { id: 'license', label: 'Número da Carta' },
+    { id: 'bi', label: 'Número de Bilhete' },
   ];
 
   const handleSearch = async () => {

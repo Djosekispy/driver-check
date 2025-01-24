@@ -6,4 +6,5 @@ export default interface IMotoristaServiceInterface {
     buscarMotoristaPeloId(id : number) : Promise<Motorista | null>
     buscarMotoristaPeloTelefone(telefone : string) : Promise<Motorista | null>
     buscarMotoristaPeloGenero(genero: string) : Promise<Motorista[] | null>
+    buscarMotoristaPeloBilhete(bilhete: string) : Promise<Motorista | null>
 }

@@ -17,6 +17,13 @@ import IGetRequestEndpoints from "@/request/method/GET/GetRequestInterface";
          obterMotoristaPorGenero = async (genero: string) : Promise<any> =>{
             return this.request.obterMotoristaPorGenero(genero)
         }
+
+        obterMotoristaPorEmail = async  (email: string) => {
+         return this.request.obterMotoristaPorEmail(email)
+        };
+        obterMotoristaPorNumeroDeBillhete = async (bilhete: string) => {
+         return this.request.obterMotoristaPorNumeroDeBillhete(bilhete)
+        };
     
 }
 

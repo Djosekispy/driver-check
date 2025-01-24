@@ -11,6 +11,13 @@ export default class GetRquestImplementation implements IGetRequestEndpoints {
         return request.route.getMotoristaByPhone.get({telefone});
     }
 
+    obterMotoristaPorEmail = async (email: string) => {
+        return request.route.getMotoristaByEmail.get({email});
+    };
+    obterMotoristaPorNumeroDeBillhete = async  (bilhete: string) => {
+        return request.route.getMotoristaByBilhete.get({bilhete});
+    };
+
     obterMotoristaPorGenero = async (genero: string) => {
         return request.route.getMotoristaByGender.get({genero});
     }
@@ -53,6 +60,9 @@ export default class GetRquestImplementation implements IGetRequestEndpoints {
 
     obterTaxaPorUpdates = async (limit: number) => {
         return request.route.getTaxaByUpdates.get({limit});
+    }
+    obterMultasDeMotorista = async (id: number) => {
+        return request.route.getMultaByMotorista.get({id})
     }
 }
 

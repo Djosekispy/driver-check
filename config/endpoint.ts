@@ -5,6 +5,8 @@ const config = {
     getMotoristaById: { endpoint: "/motorista/:id" },
     getMotoristaByPhone: { endpoint: "/motorista/telefone/:telefone" },
     getMotoristaByGender: { endpoint: "/motorista/genero/:genero" },
+    getMotoristaByBilhete: { endpoint: "/motorista/email/:email" },
+    getMotoristaByEmail: { endpoint: "/motorista/bilhete/:bilhete" },
 
     // Seguro
     getSeguroById: { endpoint: "/seguro/:id" },
@@ -23,6 +25,10 @@ const config = {
     // Taxa de Circulação
     getTaxaById: { endpoint: "/taxa/:id" },
     getTaxaByUpdates: { endpoint: "/taxa/updates/:limit" },
+
+    // Multa
+    postMultaByMotorista: { endpoint: "/multa" },
+    getMultaByMotorista: { endpoint: "/multa/motorista/:id" },
   };
 
   export default config;

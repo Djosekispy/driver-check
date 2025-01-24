@@ -1,9 +1,4 @@
 
-/*
-* obterVeiculoPorId: (id: number) => Promise<any>;
-    obterVeiculoPorPlaca: (placa: string) => Promise<any>;
-    obterVeiculoPorMarca: (marca: string) => Promise<any>;
-*/
 
 import { isAxiosError } from "axios";
 import { veiculoRepository } from "../veiculo/VeiculoRepository";

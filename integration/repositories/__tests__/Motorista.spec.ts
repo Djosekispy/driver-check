@@ -34,6 +34,21 @@ describe('Testes de integração para Motorista : casos certos', () => {
     }
   });
 
+  it('Obter Motorista por Bilhete de Identidade ou Passaport', async () => {
+    try {
+      const { data } = await motoristaRepository.obterMotoristaPorNumeroDeBillhete("98912ah9153");
+      expect(data.motorista).toMatchObject({
+        id: expect.any(Number),
+        nome: expect.any(String),
+        endereco: expect.any(String),
+        nacionalidade: expect.any(String),
+        telefone: expect.any(String),
+      });
+    } catch (error) {
+      throw error;
+    }
+  });
+
   it('Obter Motorista por Genero', async () => {
     try {
       const { data } = await motoristaRepository.obterMotoristaPorGenero("Masculino");
@@ -58,6 +73,15 @@ describe('Testes de integração para Motorista : Casos de Erro', () => {
   it('Erro ao Obter Motorista por Telefone', async () => {
     try {
     const { data } = await motoristaRepository.obterMotoristaPorTelefone("927023720");
+    expect(data.motorista).toEqual(null)
+    } catch (error) {
+      throw error;
+    }
+  });
+
+  it('Erro ao Obter Motorista por Bilhete ou Telefone', async () => {
+    try {
+    const { data } = await motoristaRepository.obterMotoristaPorNumeroDeBillhete("87126712ha12");
     expect(data.motorista).toEqual(null)
     } catch (error) {
       throw error;

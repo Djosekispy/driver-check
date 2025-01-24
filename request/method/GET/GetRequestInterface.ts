@@ -3,6 +3,8 @@
 export default interface IGetRequestEndpoints {
     obterMotoristaPorId: (id: number) => Promise<any>;
     obterMotoristaPorTelefone: (telefone: string) => Promise<any>;
+    obterMotoristaPorEmail: (email: string) => Promise<any>;
+    obterMotoristaPorNumeroDeBillhete: (bilhete: string) => Promise<any>;
     obterMotoristaPorGenero: (genero: string) => Promise<any>;
 
     obterSeguroPorId: (id: number) => Promise<any>;
@@ -18,5 +20,7 @@ export default interface IGetRequestEndpoints {
 
     obterTaxaPorId: (id: number) => Promise<any>;
     obterTaxaPorUpdates: (limit: number) => Promise<any>;
+
+    obterMultasDeMotorista: (id: number) => Promise<any>;
 }
 
