@@ -1,13 +1,12 @@
 import React, { useState } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, ScrollView, Linking, Modal, Image } from 'react-native';
 import { FontAwesome, MaterialIcons } from '@expo/vector-icons';
-import Motorista from '@/integration/model/Motorista';
 import QRCodeExport from '../molecules/QrCode';
 import { url } from '@/config/api';
-import Veiculo from '@/integration/model/Veiculo';
+import CartaDeConducao from '@/integration/model/Carta';
 
 interface ResultProps {
-  result: Veiculo;
+  result: CartaDeConducao;
 }
 
 const ResultScreenLicence: React.FC<ResultProps> = ({ result }) => {
@@ -28,16 +27,16 @@ const ResultScreenLicence: React.FC<ResultProps> = ({ result }) => {
     
       <View style={styles.header}>
         <View>
-          <Text style={styles.name}>{result?.motorista.nome}</Text>
+          <Text style={styles.name}>{result?.motorista?.nome}</Text>
           <Text style={styles.info}>
-            <FontAwesome name="phone" size={14} color="#6b7280" /> {result?.motorista.telefone}
+            <FontAwesome name="phone" size={14} color="#6b7280" /> {result?.motorista?.telefone}
           </Text>
           <Text style={styles.info}>
-            <MaterialIcons name="location-on" size={14} color="#6b7280" /> {result?.motorista.endereco}
+            <MaterialIcons name="location-on" size={14} color="#6b7280" /> {result?.motorista?.endereco}
           </Text>
         </View>
      
-        {result?.motorista.imagem ? (
+        {result?.motorista?.imagem ? (
           <Image source={{ uri: `${url}/${result?.motorista.imagem}` }} style={{ width: 48, height: 48 }} />
         ) : (
           <FontAwesome name="user" size={48} color="#6b7280" />
@@ -49,24 +48,24 @@ const ResultScreenLicence: React.FC<ResultProps> = ({ result }) => {
         <Text style={styles.sectionTitle}>
           <FontAwesome name="id-card" size={16} color="#111827" /> Documento de Identidade
         </Text>
-        <Text style={styles.sectionInfo}>Número BI: {result?.motorista.numero_bi_ou_passport}</Text>
+        <Text style={styles.sectionInfo}>Número BI: {result?.motorista?.numero_bi_ou_passport}</Text>
         <Text style={styles.sectionInfo}>
-          Expiração: {new Date(result?.motorista.data_expiracao_de_documento || '').toLocaleDateString()}
+          Expiração: {new Date(result?.motorista?.data_expiracao_de_documento || '').toLocaleDateString()}
         </Text>
-        <Text style={styles.sectionInfo}>Nacionalidade: {result?.motorista.nacionalidade}</Text>
-        <Text style={styles.sectionInfo}>Gênero: {result?.motorista.genero}</Text>
-        <Text style={styles.sectionInfo}>Data de Nascimento: {new Date(result?.motorista.data_nascimento).toLocaleDateString()}</Text>
-        <Text style={styles.sectionInfo}>Número de BI/Passport: {result?.motorista.numero_bi_ou_passport}</Text>
-        <TouchableOpacity style={styles.button} onPress={() => openDocument(result?.motorista.url_do_BI || '')}>
+        <Text style={styles.sectionInfo}>Nacionalidade: {result?.motorista?.nacionalidade}</Text>
+        <Text style={styles.sectionInfo}>Gênero: {result?.motorista?.genero}</Text>
+        <Text style={styles.sectionInfo}>Data de Nascimento: {new Date(String(result?.motorista?.data_nascimento)).toLocaleDateString()}</Text>
+        <Text style={styles.sectionInfo}>Número de BI/Passport: {result?.motorista?.numero_bi_ou_passport}</Text>
+        <TouchableOpacity style={styles.button} onPress={() => openDocument(`${url}/${result?.motorista?.url_do_BI}` || '')}>
           <Text style={styles.buttonText}>Ver Documento</Text>
         </TouchableOpacity>
       </View>
 
       {/* Cartas de Condução */}
-      {result?.motorista.cartaDeConducao?.length > 0 && (
+      {result?.motorista?.cartaDeConducao && result?.motorista?.cartaDeConducao?.length > 0 && (
         <View style={styles.section}>
          
-          {result.motorista.cartaDeConducao.map((carta) => (
+          {result.motorista?.cartaDeConducao.map((carta) => (
             <View key={carta.id} style={styles.listItem}>
               <TouchableOpacity
                 style={styles.listHeader}
@@ -100,7 +99,7 @@ const ResultScreenLicence: React.FC<ResultProps> = ({ result }) => {
                   </Text>
                   <TouchableOpacity
                     style={styles.button}
-                    onPress={() => openDocument(carta.doc_url)}
+                    onPress={() => openDocument(`${url}/${carta.doc_url}`)}
                   >
                     <Text style={styles.buttonText}>Ver Documento</Text>
                   </TouchableOpacity>
@@ -113,62 +112,67 @@ const ResultScreenLicence: React.FC<ResultProps> = ({ result }) => {
 
       <View>
         <View key={result?.id} style={styles.listItem}>
+      
           <View style={styles.section}>
             <TouchableOpacity
               style={styles.listHeader}
-              onPress={() => toggleExpand(`veiculo-${result?.id}`)}
+              onPress={() => toggleExpand(`veiculo-${result?.motorista?.veiculo[0].id}`)}
             >
               <Text style={styles.sectionTitle}>
                 <FontAwesome name="truck" size={16} color="#111827" /> Veículos
               </Text>
               <FontAwesome
-                name={expanded === `veiculo-${result.id}` ? 'chevron-up' : 'chevron-down'}
+                name={expanded === `veiculo-${result?.motorista?.veiculo[0].id}` ? 'chevron-up' : 'chevron-down'}
                 size={18}
                 color="#6b7280"
               />
             </TouchableOpacity>
-            
-            {expanded === `veiculo-${result?.id}` && (
+            {result.motorista?.veiculo.map((veiculo) => (
+            expanded === `veiculo-${veiculo?.id}` && (
               <View style={styles.collapseContent}>
-                <Text style={styles.collapseText}>Matrícula: {result?.matricula}</Text>
-                <Text style={styles.collapseText}>Combustível: {result?.combustivel}</Text>
-                <Text style={styles.collapseText}>Cor: {result?.cor}</Text>
-                <Text style={styles.collapseText}>Ano de Fabricação: {result?.ano_fabricacao}</Text>
-                <Text style={styles.collapseText}>Peso Bruto: {result?.peso_bruto}</Text>
-                <Text style={styles.collapseText}>Tipo de Caixa: {result?.tipo_de_caixa}</Text>
-                <Text style={styles.collapseText}>Distância entre Eixos: {result?.distancia_entre_eixos}</Text>
-                <Text style={styles.collapseText}>Modelo: {result?.modelo}</Text>
-                <Text style={styles.collapseText}>Marca: {result?.marca}</Text>
-                <Text style={styles.collapseText}>Medidas Pneumáticas: {result?.medidas_pneomaticas}</Text>
-                <Text style={styles.collapseText}>Lotação: {result?.lotacao}</Text>
-                <Text style={styles.collapseText}>Número Quadro: {result?.numero_quadro}</Text>
-                <Text style={styles.collapseText}>Cilindrada: {result?.cilindrada}</Text>
-                <Text style={styles.collapseText}>Número Cilindro: {result?.numero_cilindro}</Text>
-                <Text style={styles.collapseText}>Tara: {result?.tara}</Text>
-                <Text style={styles.collapseText}>Primeiro Registro: {result?.primeiro_registro}</Text>
-                <Text style={styles.collapseText}>Número Motor: {result?.numero_motor}</Text>
+                <Text style={styles.collapseText}>Matrícula: {veiculo?.matricula}</Text>
+                <Text style={styles.collapseText}>Combustível: {veiculo?.combustivel}</Text>
+                <Text style={styles.collapseText}>Cor: {veiculo?.cor}</Text>
+                <Text style={styles.collapseText}>Ano de Fabricação: {veiculo?.ano_fabricacao}</Text>
+                <Text style={styles.collapseText}>Peso Bruto: {veiculo?.peso_bruto}</Text>
+                <Text style={styles.collapseText}>Tipo de Caixa: {veiculo?.tipo_de_caixa}</Text>
+                <Text style={styles.collapseText}>Distância entre Eixos: {veiculo?.distancia_entre_eixos}</Text>
+                <Text style={styles.collapseText}>Modelo: {veiculo?.modelo}</Text>
+                <Text style={styles.collapseText}>Marca: {veiculo?.marca}</Text>
+                <Text style={styles.collapseText}>Medidas Pneumáticas: {veiculo?.medidas_pneomaticas}</Text>
+                <Text style={styles.collapseText}>Lotação: {veiculo?.lotacao}</Text>
+                <Text style={styles.collapseText}>Número Quadro: {veiculo?.numero_quadro}</Text>
+                <Text style={styles.collapseText}>Cilindrada: {veiculo?.cilindrada}</Text>
+                <Text style={styles.collapseText}>Número Cilindro: {veiculo?.numero_cilindro}</Text>
+                <Text style={styles.collapseText}>Tara: {veiculo?.tara}</Text>
+                <Text style={styles.collapseText}>Primeiro Registro: {veiculo?.primeiro_registro}</Text>
+                <Text style={styles.collapseText}>Número Motor: {veiculo?.numero_motor}</Text>
               </View>
-            )}
+            )
+             ))}
           </View>
+       
           {/* Seguro */}
           <View style={styles.section}>
             <TouchableOpacity
               style={styles.listHeader}
-              onPress={() => toggleExpand(`seguro-${result?.seguro[0].id}`)}
+              onPress={() => toggleExpand(`seguro-${result?.motorista?.veiculo[0].seguro[0].id}`)}
             >
               <Text style={styles.listTitle}>
                 <FontAwesome name="shield" size={14} color="#6b7280" /> Seguro
               </Text>
               <FontAwesome
-                name={expanded === `seguro-${result?.seguro[0].id}` ? 'chevron-up' : 'chevron-down'}
+                name={expanded === `seguro-${result?.motorista?.veiculo[0].seguro[0].id}` ? 'chevron-up' : 'chevron-down'}
                 size={18}
                 color="#6b7280"
               />
             </TouchableOpacity>
-            {expanded === `seguro-${result?.seguro[0].id}` && result?.seguro.length > 0 && (
+            {expanded === `seguro-${result?.motorista?.veiculo[0].seguro[0].id}` && result?.motorista?.veiculo[0].seguro && result?.motorista?.veiculo[0].seguro.length > 0 && (
               <View>
-                {result?.seguro.map((seguro) => (
-                  <View key={seguro.id}>
+                  {result?.motorista?.veiculo.map((veiculo) => (
+                veiculo?.seguro.map((seguro) => (
+                 
+                 <View key={seguro.id}>
                     <Text style={styles.collapseText}>Asseguradora: {seguro.asseguradora}</Text>
                     <Text style={styles.collapseText}>Tipo: {seguro.tipo}</Text>
                     <Text style={styles.collapseText}>Data de Criação:  {new Date(seguro.data_criacao).toLocaleDateString()}</Text>
@@ -178,12 +182,13 @@ const ResultScreenLicence: React.FC<ResultProps> = ({ result }) => {
                     </Text>
                     <TouchableOpacity
                       style={styles.button}
-                      onPress={() => openDocument(seguro.doc_url)}
+                      onPress={() => openDocument(`${url}/${seguro.doc_url}`)}
                     >
                       <Text style={styles.buttonText}>Ver Documento</Text>
                     </TouchableOpacity>
                   </View>
-                ))}
+                ))
+              ))}
               </View>
             )}
           </View>
@@ -192,21 +197,22 @@ const ResultScreenLicence: React.FC<ResultProps> = ({ result }) => {
           <View style={styles.section}>
             <TouchableOpacity
               style={styles.listHeader}
-              onPress={() => toggleExpand(`taxa-${result?.taxaDeCirculacao[0].id}`)}
+              onPress={() => toggleExpand(`taxa-${result?.motorista?.veiculo[0].taxaDeCirculacao[0].id}`)}
             >
               <Text style={styles.listTitle}>
                 <FontAwesome name="money" size={14} color="#6b7280" />
                  Taxa de Circulação
               </Text>
               <FontAwesome
-                name={expanded === `taxa-${result?.taxaDeCirculacao[0].id}` ? 'chevron-up' : 'chevron-down'}
+                name={expanded === `taxa-${result?.motorista?.veiculo[0].taxaDeCirculacao[0].id}` ? 'chevron-up' : 'chevron-down'}
                 size={18}
                 color="#6b7280"
               />
             </TouchableOpacity>
-            {expanded === `taxa-${result?.taxaDeCirculacao[0].id}` && result?.taxaDeCirculacao?.length > 0 && (
+            {expanded === `taxa-${result?.motorista?.veiculo[0].taxaDeCirculacao[0].id}` && result?.motorista?.veiculo[0].taxaDeCirculacao && result?.motorista?.veiculo[0].taxaDeCirculacao.length > 0 && (
               <View>
-                {result?.taxaDeCirculacao.map((taxa) => (
+                 {result?.motorista?.veiculo.map((veiculo) => (
+                veiculo?.taxaDeCirculacao.map((taxa) => (
                   <View key={taxa.id}>
                      <Text style={styles.collapseText}>
                       Criação: {new Date(taxa.criacao).toLocaleDateString()}
@@ -219,12 +225,14 @@ const ResultScreenLicence: React.FC<ResultProps> = ({ result }) => {
                     </Text>
                     <TouchableOpacity
                       style={styles.button}
-                      onPress={() => openDocument(taxa.doc_url)}
+                      onPress={() => openDocument(`${url}/${taxa.doc_url}`)}
                     >
                       <Text style={styles.buttonText}>Ver Documento</Text>
                     </TouchableOpacity>
                   </View>
-                ))}
+                ))
+              ))}
+
               </View>
             )}
           </View>
@@ -238,7 +246,7 @@ const ResultScreenLicence: React.FC<ResultProps> = ({ result }) => {
       >
         <View style={styles.modalContainer}>
           <View style={styles.modalContent}>
-            <QRCodeExport id={result.id} />
+            <QRCodeExport id={Number(String(result?.motorista?.id))} />
             <TouchableOpacity 
               style={styles.closeButton} 
               onPress={() => setModalVisible(false)}

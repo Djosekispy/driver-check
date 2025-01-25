@@ -10,7 +10,7 @@ import Motorista from "./Motorista";
     doc_url: string;
     primeira_emissao_ano: number;
     motorista_id : number;
-    motorista? : Motorista[]
+    motorista? : Motorista
   
     constructor(
       id: number,
