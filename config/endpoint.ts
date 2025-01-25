@@ -5,8 +5,8 @@ const config = {
     getMotoristaById: { endpoint: "/motorista/:id" },
     getMotoristaByPhone: { endpoint: "/motorista/telefone/:telefone" },
     getMotoristaByGender: { endpoint: "/motorista/genero/:genero" },
-    getMotoristaByBilhete: { endpoint: "/motorista/email/:email" },
-    getMotoristaByEmail: { endpoint: "/motorista/bilhete/:bilhete" },
+    getMotoristaByBilhete: { endpoint: "/motorista/bilhete/:bilhete" },
+    getMotoristaByEmail: { endpoint: "/motorista/email/:email" },
 
     // Seguro
     getSeguroById: { endpoint: "/seguro/:id" },

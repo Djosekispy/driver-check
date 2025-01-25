@@ -1,11 +1,9 @@
 import Header from '@/components/home/organisms/Header';
 import React, { useState } from 'react';
-import { SafeAreaView, ScrollView, Text, View } from 'react-native';
-
+import { SafeAreaView, ScrollView } from 'react-native';
 import { styles } from '../../styles/style'
 import { motoristaService } from '@/integration/services/motorista/MotoristaService';
 import { useLocalSearchParams, useRouter } from 'expo-router';
-import { FontAwesome } from '@expo/vector-icons';
 import ResultScreenDriver from '@/components/home/serachType/driver';
 import Motorista from '@/integration/model/Motorista';
 import ErrorModal from '@/components/search/ErrorModal';
@@ -17,7 +15,7 @@ import { cartaService } from '@/integration/services/carta/CartaService';
 import CartaDeConducao from '@/integration/model/Carta';
 import ResultScreenVechicle from '@/components/home/serachType/vechicle';
 
-const SearchScreen: React.FC = () => {
+function  SearchScreen() {
 const router = useRouter();
   const { query, category } = useLocalSearchParams<{query : string, category : string}>()
   const [ isLoading, setIsLoading ] = React.useState(false)
@@ -29,8 +27,7 @@ const router = useRouter();
   const phone = async ()=> {
     setIsLoading(true)
     try {
-      const response = category === 'phone' ? await motoristaService.buscarMotoristaPeloId(Number(query)) : await motoristaService.buscarMotoristaPeloTelefone(query)
-      console.log('Veio da API',JSON.stringify(response))
+      const response = category === 'phone' ?  await motoristaService.buscarMotoristaPeloTelefone(query) : await motoristaService.buscarMotoristaPeloId(Number(query)) 
       if(!response){
         setModalVisible(true)
         setIsLoading(false)
@@ -103,7 +100,6 @@ const router = useRouter();
   }
 
   React.useEffect(() => {
-    console.log(category)
     if (category === 'phone' || category === 'byId') {
       phone();
     } else if (category === 'plate'){

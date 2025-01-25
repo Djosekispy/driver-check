@@ -2,6 +2,7 @@ import IMultaInterface from "@/integration/repositories/multa/IMultaRepository";
 import IMultaServiceInterface from "./IMultaService";
 import { isAxiosError } from "axios";
 import Multa from "@/integration/model/Multa";
+import { multaRepository } from "@/integration/repositories/multa/MultaRepository";
 
 
 class MultaService implements IMultaServiceInterface {
@@ -28,3 +29,5 @@ class MultaService implements IMultaServiceInterface {
     
 }
 }
+
+export const multaService = new MultaService(multaRepository);

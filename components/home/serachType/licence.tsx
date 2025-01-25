@@ -4,6 +4,12 @@ import { FontAwesome, MaterialIcons } from '@expo/vector-icons';
 import QRCodeExport from '../molecules/QrCode';
 import { url } from '@/config/api';
 import CartaDeConducao from '@/integration/model/Carta';
+import { useRouter } from 'expo-router';
+import * as WebBrowser from 'expo-web-browser';
+import { multaService } from '@/integration/services/multa/MultaService';
+import ErrorModal from '@/components/search/ErrorModal';
+import LoadingModal from '@/components/search/searchModal';
+import SuccessModal from '@/components/search/SuccessModal';
 
 interface ResultProps {
   result: CartaDeConducao;
@@ -11,20 +17,82 @@ interface ResultProps {
 
 const ResultScreenLicence: React.FC<ResultProps> = ({ result }) => {
   const [expanded, setExpanded] = useState<string | null>(null);
-  const [ modalVisible , setModalVisible ] = useState(false)
+   const [ modalVisible , setModalVisible ] = useState(false)
+  const [ modalSuccessVisible , setModalSuccessVisible ] = useState(false)
+    const [ isLoading, setIsLoading ] = React.useState(false)
+  const router = useRouter();
+  const close = () => {
+    setModalVisible(false)
+  }
+  const closeSuccessModal = () => {
+    setModalSuccessVisible(false)
+  }
   const toggleExpand = (id: string) => {
     setExpanded((prev) => (prev === id ? null : id));
   };
 
-  const openDocument = (url: string) => {
-    Linking.openURL(url);
-  };
+  const openDocument = async (location: string) => {
+    let result = await WebBrowser.openBrowserAsync(`${url}/${location}`);	
 
-  console.log(JSON.stringify(result))
+  };
+ const registrarMultaPorTaxa = async () => {
+    try {
+      setIsLoading(true)
+      const multa = await multaService.registarMultaDeMotorista(
+        'Multa por falta de taxa de circulação', 
+        'Notificamos que não pagou a sua taxa de circulação, por favor, dirija-se até ao balcão mais próximo e regularize já a situação! Obrigado.', Number(String(result?.motorista?.id)));
+   setModalSuccessVisible(true)
+      } catch (error) {
+      setModalVisible(true)
+  }finally{
+    setIsLoading(false)
+  }
+  }
+
+  const registrarMultaPorSeguro = async () => {
+    try {
+      setIsLoading(true)
+      const multa = await multaService.registarMultaDeMotorista(
+        'Multa por falta de Seguro de Viatura', 
+        'Notificamos que não pagou o seu seguro de viatura, por favor, dirija-se até ao balcão mais próximo da sua seguradora e regularize já a situação! Obrigado.', Number(String(result?.motorista?.id)));
+        setModalSuccessVisible(true)
+      } catch (error) {
+      setModalVisible(true)
+  }finally{
+    setIsLoading(false)
+  }
+  }
+
+  const registrarMultaPorCarta = async () => {
+    try {
+      setIsLoading(true)
+      const multa = await multaService.registarMultaDeMotorista(
+        'Carta de Condução fora do prazo de validade', 
+        'Notificamos que a sua carta de condução está fora do prazo de validade, por favor, dirija-se ao balcão mais próximo dos serviços de trânsito para regularizar a situação! Obrigado.', Number(String(result?.motorista?.id)));
+        setModalSuccessVisible(true)
+      } catch (error) {
+      setModalVisible(true)
+  }finally{
+    setIsLoading(false)
+  }
+  }
   return (
     <ScrollView style={styles.container}>
       {/* Header */}
-    
+      <ErrorModal
+      visible={modalVisible}
+      title="Erro no Processamento"
+      description="Ops! parace que houve um erro, por favor, tente mais tarde"
+      onClose={close}
+    />
+       <LoadingModal visible={isLoading} message="Buscando informações, aguarde..." />
+  
+  <SuccessModal
+    visible={modalSuccessVisible}
+    title="Envio De Multa"
+    description="O Motorista foi notificado com sucesso!"
+    onClose={closeSuccessModal}
+  />
       <View style={styles.header}>
         <View>
           <Text style={styles.name}>{result?.motorista?.nome}</Text>
@@ -97,6 +165,15 @@ const ResultScreenLicence: React.FC<ResultProps> = ({ result }) => {
                   <Text style={styles.collapseText}>
                     Primeira Emissão Ano: {carta.primeira_emissao_ano}
                   </Text>
+
+                  {new Date(carta.validade) < new Date() && (
+                    <TouchableOpacity
+                      style={[styles.button,{backgroundColor: '#ef4444'}]}
+                      onPress={registrarMultaPorCarta}
+                    >
+                      <Text style={styles.buttonText}>Registrar Multa</Text>
+                    </TouchableOpacity>
+                  )}
                   <TouchableOpacity
                     style={styles.button}
                     onPress={() => openDocument(`${url}/${carta.doc_url}`)}
@@ -180,6 +257,15 @@ const ResultScreenLicence: React.FC<ResultProps> = ({ result }) => {
                     <Text style={styles.collapseText}>
                       Expiração: {new Date(seguro.Data_expiracao).toLocaleDateString()}
                     </Text>
+
+                    {new Date(seguro.Data_expiracao) < new Date() && (
+                          <TouchableOpacity
+                            style={[styles.button,{backgroundColor: '#ef4444'}]}
+                            onPress={registrarMultaPorSeguro}
+                          >
+                            <Text style={styles.buttonText}>Registrar Multa</Text>
+                          </TouchableOpacity>
+                        )}
                     <TouchableOpacity
                       style={styles.button}
                       onPress={() => openDocument(`${url}/${seguro.doc_url}`)}
@@ -223,6 +309,14 @@ const ResultScreenLicence: React.FC<ResultProps> = ({ result }) => {
                     <Text style={styles.collapseText}>
                       Expiração: {new Date(taxa.data_expiracao).toLocaleDateString()}
                     </Text>
+                    {new Date(taxa.data_expiracao) < new Date() && (
+                          <TouchableOpacity
+                            style={[styles.button,{backgroundColor: '#ef4444'}]}
+                            onPress={registrarMultaPorTaxa}
+                          >
+                            <Text style={styles.buttonText}>Registrar Multa</Text>
+                          </TouchableOpacity>
+                        )}
                     <TouchableOpacity
                       style={styles.button}
                       onPress={() => openDocument(`${url}/${taxa.doc_url}`)}
@@ -275,7 +369,7 @@ const ResultScreenLicence: React.FC<ResultProps> = ({ result }) => {
 }
 
 
-const styles = StyleSheet.create({
+export const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#f9fafb',

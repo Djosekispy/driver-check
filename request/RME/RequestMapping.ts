@@ -60,7 +60,8 @@ if (url.includes(":")) {
         ...(token && { Authorization: `Bearer ${token}` }),
       },
     };
-    
+
+    console.log("Rota da Requisição",axiosConfig)
     return this.api.request(axiosConfig);
   }
 
