@@ -6,9 +6,10 @@ import driver from '@/assets/images/driver.png';
 import { useRouter } from 'expo-router';
 
 interface HeaderProps {
-  title ? : string
+  title?: string;
 }
-function Header ({title}: HeaderProps){
+
+function Header({ title }: HeaderProps) {
   const [hasPermission, setHasPermission] = useState<boolean | null>(null);
   const [facing, setFacing] = useState<CameraType>('back');
   const [modalVisible, setModalVisible] = useState(false);
@@ -25,16 +26,14 @@ function Header ({title}: HeaderProps){
     }
   };
 
-  const handleBarCodeScanned = ({ data }: { data: string }) => {
-    setScanned(true);
-    setModalVisible(false);
-    const id = data.split('id=')[1]; 
-    router.replace(`/(tabs)/user/${id}`);
-  };
-
-  const handleBarCodeScannedErro = ({ data }: { data: string }) => {
-    setScanned(false);
-    setModalVisible(true);
+  const handleBarCodeScanned = ({ data }: any) => {
+    if (scanned) {
+     setScanned(false);
+      //console.log(data);
+      setModalVisible(false);
+       const id = data.split('id=')[1]; 
+       return router.push({ pathname: `/(tabs)/user/${id}`, params: { id } });
+    }
   };
 
   const toggleCameraFacing = () => {
@@ -43,7 +42,6 @@ function Header ({title}: HeaderProps){
 
   return (
     <View style={styles.header}>
-      
       <TouchableOpacity onPress={() => router.back()}>
         <Image source={driver} style={styles.icon} />
       </TouchableOpacity>
@@ -61,8 +59,9 @@ function Header ({title}: HeaderProps){
               <Text>Permissão para acessar a câmera negada!</Text>
             ) : (
               <CameraView
+              active={modalVisible}
                 facing={facing}
-                onBarcodeScanned={scanned ? handleBarCodeScannedErro : handleBarCodeScanned }
+                onBarcodeScanned={handleBarCodeScanned}
                 barcodeScannerSettings={{
                   barcodeTypes: ['qr'],
                 }}
