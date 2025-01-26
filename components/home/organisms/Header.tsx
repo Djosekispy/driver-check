@@ -27,8 +27,8 @@ function Header({ title }: HeaderProps) {
   };
 
   const handleBarCodeScanned = ({ data }: any) => {
-    if (scanned) {
-     setScanned(false);
+    if (!scanned) {
+     setScanned(true);
       //console.log(data);
       setModalVisible(false);
        const id = data.split('id=')[1]; 
