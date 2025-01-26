@@ -31,7 +31,6 @@ class SecureStoreRepository implements IRepository {
       date: new Date().toISOString(),
       details,
     };
-    console.log(newRecord)
     records.push(newRecord);
     await this.saveAll(records);
     return newRecord;

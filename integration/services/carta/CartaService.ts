@@ -13,7 +13,7 @@ class CartaService implements ICartaServiceInterface {
     buscarCartaPorId = async (id: number) => {
             try {
                 const { data } = await this.cartaRepository.obterCartaPorId(id);
-                await this.storegeRepository.create((data.result as CartaDeConducao).motorista_id, String((data as CartaDeConducao).motorista?.nome), `Carta Nº : ${String((data as CartaDeConducao).numero_da_licenca)}`)
+                await this.storegeRepository.create((data.result as CartaDeConducao).motorista_id, String((data.result as CartaDeConducao).motorista?.nome), `Carta Nº : ${String((data.result as CartaDeConducao).numero_da_licenca)}`)
                 return data.result as CartaDeConducao;
             } catch (error) {
                 const message = isAxiosError(error) ? error.response?.data.message : error;
@@ -23,7 +23,7 @@ class CartaService implements ICartaServiceInterface {
     buscarCartaPorLicenca = async (licenca: string) => {
         try {
             const { data } = await this.cartaRepository.obterCartaPorLicenca(licenca);
-            await this.storegeRepository.create((data.carta as CartaDeConducao).motorista_id, String((data as CartaDeConducao).motorista?.nome), `Carta Nº : ${String((data as CartaDeConducao).numero_da_licenca)}`)
+            await this.storegeRepository.create((data.carta as CartaDeConducao).motorista_id, String((data.carta as CartaDeConducao).motorista?.nome), `Carta Nº : ${String((data.carta as CartaDeConducao).numero_da_licenca)}`)
             return data.carta as CartaDeConducao;
         } catch (error) {
             const message = isAxiosError(error) ? error.response?.data.message : error;

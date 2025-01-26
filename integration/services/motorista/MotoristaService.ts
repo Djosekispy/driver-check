@@ -14,7 +14,7 @@ class MotoristaService implements  IMotoristaServiceInterface {
     buscarMotoristaPeloId = async (id : number)  => {
         try {
             const { data } = await this.motoristaRepository.obterMotoristaPorId(id);
-           await this.storegeRepository.create((data.motorista as Motorista).id, (data as Motorista).nome, `Bilhete Nº : ${String((data as Motorista).numero_bi_ou_passport)}`)
+           await this.storegeRepository.create((data.result as Motorista).id, (data.result as Motorista).nome, `Bilhete Nº : ${String((data.result as Motorista).numero_bi_ou_passport)}`)
             return data.result as Motorista
         } catch (error) {
             const message = isAxiosError(error) ? error.response?.data.message : error 
@@ -24,8 +24,7 @@ class MotoristaService implements  IMotoristaServiceInterface {
     buscarMotoristaPeloTelefone = async (telefone : string) => {
         try {
             const { data } = await this.motoristaRepository.obterMotoristaPorTelefone(telefone);
-           
-            await this.storegeRepository.create((data.motorista as Motorista).id, (data as Motorista).nome, `Bilhete Nº : ${String((data as Motorista).numero_bi_ou_passport)}`)
+            await this.storegeRepository.create((data.motorista as Motorista).id, (data.motorista as Motorista).nome, `Bilhete Nº : ${String((data.motorista as Motorista).numero_bi_ou_passport)}`)
             return data.motorista as Motorista
         } catch (error) {
             const message = isAxiosError(error) ? error.response?.data.message : error 
@@ -46,7 +45,7 @@ class MotoristaService implements  IMotoristaServiceInterface {
     buscarMotoristaPeloBilhete = async (bilhete: string) =>{
         try {
             const { data } = await this.motoristaRepository.obterMotoristaPorNumeroDeBillhete(bilhete);
-            await this.storegeRepository.create((data.motorista as Motorista).id, (data as Motorista).nome, `Bilhete Nº : ${String((data as Motorista).numero_bi_ou_passport)}`)
+            await this.storegeRepository.create((data.motorista as Motorista).id, (data.motorista as Motorista).nome, `Bilhete Nº : ${String((data.motorista as Motorista).numero_bi_ou_passport)}`)
             return data.motorista as Motorista
         } catch (error) {
             const message = isAxiosError(error) ? error.response?.data.message : error 

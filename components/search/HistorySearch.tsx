@@ -4,14 +4,16 @@ import { FontAwesome } from '@expo/vector-icons';
 import React, { useEffect } from 'react';
 import { View, Text, FlatList, TouchableOpacity, StyleSheet, Modal, Alert } from 'react-native';
 import LoadingModal from './searchModal';
+import { useRouter } from 'expo-router';
 
 
 
 const SearchHistory = () => {
   const [searchHistory, setSearchHistory] = React.useState<Records[]>([]);
   const [isLoading, setIsLoading] = React.useState(false);
-  const handleRepeatSearch = (details: string) => {
-    console.log(`Repetindo busca para: ${details}`);
+  const router = useRouter();
+  const handleRepeatSearch = (id: string) => {
+   router.push({pathname:`/${id}`, params:{ id }});
   };
   const onDelete = () => {
     Alert.alert('Deletar Histórico de consultas', 'Tem certeza que deseja deletar todos os registros', [{
@@ -47,7 +49,7 @@ const SearchHistory = () => {
       <View style={styles.historyInfo}>
         <View style={styles.historyTopView}>
           <Text style={styles.historyName}>{item.name}</Text>
-          <Text style={styles.historyDate}>{item.date}</Text>
+          <Text style={styles.historyDate}>{new Date(item.date).toLocaleDateString('pt-BR', { day: 'numeric', month: 'short', year: 'numeric' })}</Text>
         </View>
         <View style={styles.historyTopView}>
           <Text style={styles.historyDetails}>{item.details}</Text>

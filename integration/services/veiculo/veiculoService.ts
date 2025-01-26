@@ -23,7 +23,7 @@ class VeiculoService implements IVeiculoService {
         
         try {
             const { data } = await this.veiculoRepository.obterVeiculoPorPlaca(placa)
-            await this.storegeRepository.create((data.veiculo as Veiculo).motorista_id, (data as Veiculo).motorista.nome, `Matrícula : ${String((data as Veiculo).matricula)}`)
+            await this.storegeRepository.create((data.veiculo as Veiculo).motorista_id, (data.veiculo as Veiculo).motorista.nome, `Matrícula : ${String((data.veiculo as Veiculo).matricula)}`)
             return data.veiculo as Veiculo
         } catch (error) {
             const message = isAxiosError(error) ? error.response?.data.message : error;

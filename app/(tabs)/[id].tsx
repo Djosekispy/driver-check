@@ -11,7 +11,7 @@ import LoadingModal from '@/components/search/searchModal';
 
 const SearchScreen: React.FC = () => {
 const router = useRouter();
-  const { id } = useLocalSearchParams();
+  const { id } = useLocalSearchParams<{id : string}>();
   const [ isLoading, setIsLoading ] = React.useState(false)
   const [driver, setDriver ] = useState<Motorista>()
   const [modalVisible, setModalVisible] = useState(false);
