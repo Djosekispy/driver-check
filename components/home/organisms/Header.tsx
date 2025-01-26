@@ -44,7 +44,7 @@ function Header ({title}: HeaderProps){
 
   return (
     <View style={styles.header}>
-      <TouchableOpacity onPress={() => router.replace('/')}>
+      <TouchableOpacity onPress={() => router.back()}>
         <Image source={driver} style={styles.icon} />
       </TouchableOpacity>
       <Text style={styles.title}>{title ? title : 'Driver Check'}</Text>

@@ -78,7 +78,7 @@ const ResultScreen: React.FC<ResultProps> = ({ result }) => {
     setIsLoading(false)
   }
   }
-
+ const multa = result.multa.some(item => (item.estado === 'Corrente' )) 
   return (
     <ScrollView style={styles.container}>
       {/* Header */}
@@ -108,11 +108,22 @@ const ResultScreen: React.FC<ResultProps> = ({ result }) => {
           </Text>
         </View>
      
-        {result?.imagem ? (
-          <Image source={{ uri: `${url}/${result?.imagem}` }} style={{ width: 48, height: 48 }} />
-        ) : (
-          <FontAwesome name="user" size={48} color="#6b7280" />
-        )}
+      { multa ?  
+      <TouchableOpacity
+      onPress={()=>router.replace({pathname:'/(tabs)/multa', params:{motoristaId: result.id}})}
+      >
+<FontAwesome name="exclamation-triangle" size={24} color="#EF4444" /> 
+      </TouchableOpacity>
+      :
+      <TouchableOpacity
+      onPress={()=>router.replace({pathname:'/(tabs)/multa', params:{motoristaId: result.id}})}
+      >
+      <MaterialIcons name="gpp-good" size={24} color="#10B981" />
+      </TouchableOpacity>
+      }
+
+      
+        
       </View>
 
       {/* BI Section */}
