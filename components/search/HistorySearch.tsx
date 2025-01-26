@@ -1,83 +1,88 @@
+import { Records } from '@/integration/repositories/repositoryBase/IRepositoryBase';
+import { repository } from '@/integration/repositories/repositoryBase/RepositoryBase';
 import { FontAwesome } from '@expo/vector-icons';
-import React from 'react';
+import React, { useEffect } from 'react';
 import { View, Text, FlatList, TouchableOpacity, StyleSheet, Modal, Alert } from 'react-native';
+import LoadingModal from './searchModal';
 
-type Search = {
-  name: string;
-  id: string;
-  searchDate: string;
-  details: string;
-};
 
-const searchHistory: Search[] = [
-  { id: '1', name: 'João Silva', searchDate: '2025-01-01', details: 'Carta Nº 123456' },
-  { id: '2', name: 'Ana Sousa', searchDate: '2024-12-30', details: 'Telefone: +244 987654321' },
-  { id: '3', name: 'Carlos Mendes', searchDate: '2024-12-28', details: 'BI: 001234567' },
-  { id: '4', name: 'Carlos Mendes', searchDate: '2024-12-28', details: 'BI: 001234567' },
-  { id: '5', name: 'Carlos Mendes', searchDate: '2024-12-28', details: 'BI: 001234567' },
-  { id: '6', name: 'Carlos Mendes', searchDate: '2024-12-28', details: 'BI: 001234567' },
-  { id: '7', name: 'Carlos Mendes', searchDate: '2024-12-28', details: 'BI: 001234567' },
-  { id: '8', name: 'Carlos Mendes', searchDate: '2024-12-28', details: 'BI: 001234567' },
-  { id: '9', name: 'Carlos Mendes', searchDate: '2024-12-28', details: 'BI: 001234567' },
-  { id: '10', name: 'Carlos Mendes', searchDate: '2024-12-28', details: 'BI: 001234567' },
-  { id: '11', name: 'Carlos Mendes', searchDate: '2024-12-28', details: 'BI: 001234567' },
-  { id: '12', name: 'Carlos Mendes', searchDate: '2024-12-28', details: 'BI: 001234567' },
-];
 
 const SearchHistory = () => {
+  const [searchHistory, setSearchHistory] = React.useState<Records[]>([]);
+  const [isLoading, setIsLoading] = React.useState(false);
   const handleRepeatSearch = (details: string) => {
     console.log(`Repetindo busca para: ${details}`);
   };
- const onDelete = ()=>{
-  Alert.alert('Deletar Histórico de consultas','Tem certeza que deseja deletar todos os registros',[{
-    text: 'Não', style : 'cancel'
-  },
-  {
-    text: 'Sim', onPress : ()=>alert('Informações apagadas com sucesso')
+  const onDelete = () => {
+    Alert.alert('Deletar Histórico de consultas', 'Tem certeza que deseja deletar todos os registros', [{
+      text: 'Não', style: 'cancel'
+    },
+    {
+      text: 'Sim', onPress: async () => {
+        setIsLoading(true);
+        await repository.deleteAll();
+        getSearchHistory();
+        setIsLoading(false);
+      }
+    }
+    ], {
+      cancelable: true,
+      userInterfaceStyle: 'dark'
+    })
   }
-],{
-  cancelable : true,
-  userInterfaceStyle: 'dark'
-})
- }
-  const renderHistoryItem = ({ item }: { item: Search }) => (
+
+  const getSearchHistory = async () => {
+    setIsLoading(true);
+    const searchHistory = await repository.getAll();
+    setSearchHistory(searchHistory);
+    setIsLoading(false);
+  }
+
+  useEffect(() => {
+    getSearchHistory();
+  }, [])
+
+  const renderHistoryItem = ({ item }: { item: Records }) => (
     <View style={styles.historyItem}>
       <View style={styles.historyInfo}>
         <View style={styles.historyTopView}>
-        <Text style={styles.historyName}>{item.name}</Text>
-        <Text style={styles.historyDate}>{item.searchDate}</Text>
+          <Text style={styles.historyName}>{item.name}</Text>
+          <Text style={styles.historyDate}>{item.date}</Text>
         </View>
         <View style={styles.historyTopView}>
-        <Text style={styles.historyDetails}>{item.details}</Text>
-        <TouchableOpacity
-        style={styles.repeatButton}
-        onPress={() => handleRepeatSearch(item.details)}
-      >
-          <FontAwesome name='repeat' size={18} color='#3b82f6' />
-      </TouchableOpacity>
+          <Text style={styles.historyDetails}>{item.details}</Text>
+          <TouchableOpacity
+            style={styles.repeatButton}
+            onPress={() => handleRepeatSearch(String(item.id))}
+          >
+            <FontAwesome name='repeat' size={18} color='#3b82f6' />
+          </TouchableOpacity>
         </View>
-
       </View>
-    
-
-    
     </View>
   );
 
   return (
     <View style={styles.container}>
+      <LoadingModal visible={isLoading} message="Buscando informações, aguarde..." />
       <View style={styles.deleteSecction}>
-      <TouchableOpacity
-      onPress={onDelete}
-      >
+        <TouchableOpacity
+          onPress={onDelete}
+        >
           <FontAwesome name='trash-o' size={20} color='red' />
-      </TouchableOpacity>
+        </TouchableOpacity>
       </View>
       <FlatList
         data={searchHistory}
-        keyExtractor={(item) => item.id}
+        keyExtractor={({ id }) => String(id)}
         renderItem={renderHistoryItem}
         showsVerticalScrollIndicator={false}
+        ListEmptyComponent={
+          <View style={styles.emptyContainer}>
+            <FontAwesome name='info-circle' size={40} color='#3b82f6' />
+            <Text style={styles.emptyTitle}>Nenhum histórico encontrado.</Text>
+          </View>
+        }
       />
     </View>
   );
@@ -90,7 +95,7 @@ const styles = StyleSheet.create({
       height: 300
   },
   container: {
-    padding:16,
+    padding: 16,
     flex: 1,
     backgroundColor: '#f3f4f6',
   },
@@ -101,6 +106,17 @@ const styles = StyleSheet.create({
     marginBottom: 16,
     textAlign: 'center',
   },
+  emptyContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  emptyTitle: {
+    fontSize: 16,
+    color: '#6b7280',
+    marginTop: 8,
+  },
+  
   historyItem: {
     flexDirection: 'row',
     justifyContent: 'space-between',

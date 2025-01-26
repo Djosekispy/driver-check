@@ -39,7 +39,8 @@
     "react-native-view-shot": "^4.0.3",
     "ts-node": "^10.9.2",
     "react-native-webview": "13.12.5",
-    "expo-web-browser": "~14.0.2"
+    "expo-web-browser": "~14.0.2",
+    "expo-secure-store": "~14.0.1"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0",
