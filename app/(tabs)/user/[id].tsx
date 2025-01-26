@@ -1,7 +1,7 @@
 import Header from '@/components/home/organisms/Header';
 import React, { useState } from 'react';
 import { SafeAreaView, ScrollView} from 'react-native';
-import { styles } from '../../styles/style'
+import { styles } from '../../../styles/style'
 import { motoristaService } from '@/integration/services/motorista/MotoristaService';
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import ResultScreenDriver from '@/components/home/serachType/driver';

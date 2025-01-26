@@ -79,6 +79,7 @@ const ResultScreenVechicle: React.FC<ResultProps> = ({ result }) => {
     setIsLoading(false)
   }
   }
+  const multa = result.motorista?.multa?.some(item => (item.estado === 'Corrente' )) 
   return (
     <ScrollView style={styles.container}>
       {/* Header */}
@@ -107,11 +108,19 @@ const ResultScreenVechicle: React.FC<ResultProps> = ({ result }) => {
           </Text>
         </View>
      
-        {result?.motorista.imagem ? (
-          <Image source={{ uri: `${url}/${result?.motorista.imagem}` }} style={{ width: 48, height: 48 }} />
-        ) : (
-          <FontAwesome name="user" size={48} color="#6b7280" />
-        )}
+        { multa ?  
+      <TouchableOpacity
+      onPress={()=>router.replace({pathname:'/(tabs)/multa', params:{motoristaId: result?.motorista.id}})}
+      >
+<FontAwesome name="exclamation-triangle" size={24} color="#EF4444" /> 
+      </TouchableOpacity>
+      :
+      <TouchableOpacity
+      onPress={()=>router.replace({pathname:'/(tabs)/multa', params:{motoristaId: result?.motorista.id}})}
+      >
+      <MaterialIcons name="gpp-good" size={24} color="#10B981" />
+      </TouchableOpacity>
+      }
       </View>
 
       {/* BI Section */}

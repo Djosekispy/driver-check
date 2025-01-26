@@ -8,7 +8,7 @@ const HomeCards : React.FC = () => {
   const router = useRouter();
 
   const handleLearnApp = () => {
-    console.log('Navegar para Ensino de Usar o App');
+    router.push('/(tabs)/learn');
   };
 
   return (
@@ -31,6 +31,7 @@ const HomeCards : React.FC = () => {
           </Text>
         </TouchableOpacity>
       </View>
+      
     </SafeAreaView>
   );
 };

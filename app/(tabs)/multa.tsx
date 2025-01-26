@@ -48,7 +48,11 @@ const MultasList: React.FC = () => {
       <View style={style.itemContainer}>
         <TouchableOpacity onPress={() => handleCollapseToggle(item.id)} style={style.itemHeader}>
           <Text style={style.title}>{item.titulo}</Text>
-          <Text style={style.estado}>{item.estado}</Text>
+          {item.estado === 'Corrente' ? (
+            <FontAwesome name="exclamation-triangle" size={20} color="orange" />
+          ) : (
+            <FontAwesome name="check-circle" size={20} color="green" />
+          )}
         </TouchableOpacity>
 
         {isExpanded && <Text style={style.description}>{description}</Text>}
@@ -93,9 +97,9 @@ const style = StyleSheet.create({
     position: 'absolute',
     bottom: 20,
     right: 20,
-    backgroundColor: '#007BFF',
-    borderRadius: 25,
-    padding: 10,
+    backgroundColor: '#6b7280',
+    borderRadius: 100,
+    padding: 15,
     elevation: 5,
   },
   backButtonText: {
@@ -109,14 +113,14 @@ const style = StyleSheet.create({
     alignItems: 'center',
   },
   title: {
-    fontSize: 16,
+    fontSize: 15,
     fontWeight: 'bold',
-    color: '#333',
+    color: '#808080', 
     width: '75%',
   },
   estado: {
     fontSize: 16,
-    color: '#007BFF',
+    color: '#FFA500', 
     textAlign: 'right',
   },
   description: {

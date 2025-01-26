@@ -13,7 +13,7 @@ const SearchHistory = () => {
   const [isLoading, setIsLoading] = React.useState(false);
   const router = useRouter();
   const handleRepeatSearch = (id: string) => {
-   router.push({pathname:`/${id}`, params:{ id }});
+   router.push({pathname:`/(tabs)/user/${id}`, params:{ id }});
   };
   const onDelete = () => {
     Alert.alert('Deletar Histórico de consultas', 'Tem certeza que deseja deletar todos os registros', [{

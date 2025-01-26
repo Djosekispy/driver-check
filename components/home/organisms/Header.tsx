@@ -29,13 +29,12 @@ function Header ({title}: HeaderProps){
     setScanned(true);
     setModalVisible(false);
     const id = data.split('id=')[1]; 
-    router.replace(`/${id}`);
+    router.replace(`/(tabs)/user/${id}`);
   };
 
   const handleBarCodeScannedErro = ({ data }: { data: string }) => {
     setScanned(false);
     setModalVisible(true);
-    alert(`QR Code Não Encontrado`);
   };
 
   const toggleCameraFacing = () => {
@@ -44,6 +43,7 @@ function Header ({title}: HeaderProps){
 
   return (
     <View style={styles.header}>
+      
       <TouchableOpacity onPress={() => router.back()}>
         <Image source={driver} style={styles.icon} />
       </TouchableOpacity>
@@ -62,7 +62,7 @@ function Header ({title}: HeaderProps){
             ) : (
               <CameraView
                 facing={facing}
-                onBarcodeScanned={scanned ? handleBarCodeScannedErro : handleBarCodeScanned}
+                onBarcodeScanned={scanned ? handleBarCodeScannedErro : handleBarCodeScanned }
                 barcodeScannerSettings={{
                   barcodeTypes: ['qr'],
                 }}
