@@ -1,3 +1,4 @@
+import { AuthProvider } from '@/context';
 import { Stack } from 'expo-router';
 import { StatusBar } from 'react-native';
 
@@ -17,10 +18,12 @@ export default function RootLayout() {
 function RootLayoutNav() {
   return (
     <>
+    <AuthProvider>
     <StatusBar backgroundColor={'#FFF'} barStyle={'dark-content'} networkActivityIndicatorVisible translucent />
       <Stack>
         <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
       </Stack>
+      </AuthProvider>
       </>
   );
 }

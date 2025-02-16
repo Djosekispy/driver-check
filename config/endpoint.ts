@@ -1,5 +1,8 @@
 
 const config = {
+  //Trânsito Autenticação
+  authLogin: { endpoint: "/login" },
+  authLogout: { endpoint: "/logout" },
     
     // Motorista
     getMotoristaById: { endpoint: "/motorista/:id" },

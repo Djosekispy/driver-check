@@ -11,6 +11,7 @@ interface Records {
     read(id: number): Promise<Records | null>;
     update(id: number, updatedData: Partial<Records>): Promise<Records>;
     delete(id: number): Promise<boolean>;
+    deleteAll():Promise<boolean>;
   }
 
   export { Records , IRepository }

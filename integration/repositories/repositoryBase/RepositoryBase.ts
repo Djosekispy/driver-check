@@ -74,4 +74,7 @@ class SecureStoreRepository implements IRepository {
 
 }
 
-export const repository = new SecureStoreRepository('my_records');
+const repository = new SecureStoreRepository('my_records');
+const repositoryUser = new SecureStoreRepository('user');
+
+export { repository, repositoryUser};
